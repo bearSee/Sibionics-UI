@@ -1,0 +1,84 @@
+
+@import "common/theme.scss";
+
+.sib-index-page {
+  width: 100%;
+  height: 100%;
+  .index-menu-box {
+    width: auto!important;
+    overflow: hidden;
+    display: block;
+    background: #fff;
+    box-shadow: 1px 0px 1px 0px rgba(0, 0, 0, 0.1);
+    .sib-menu {
+        height: 100%;
+        overflow-y: auto;
+        background: #fff;
+        font-size: 14px;
+        font-weight: 600;
+        font-family: PingFangTC-Semibold, PingFangTC;
+        .collapse-control {
+          border-right: 0;
+        }
+        .el-menu:not(.el-menu--inline) {
+            width: 100%;
+            height: 100%;
+            border-right: 0;
+            .el-menu-item, .el-menu-title {
+              height: 60px;
+              line-height: 60px;
+              padding-left: 8px;
+              &.is-active {
+                background: #E8FBF9;
+                border-left: 8px solid $theme;
+              }
+            }
+            &>.el-menu-item {
+              &.is-active {
+                padding-left: 12px!important;
+              }
+            }
+            &>.el-submenu > .el-menu--inline {
+              .el-menu-item {
+                padding-left: 50px!important;
+                &.is-active {
+                  padding-left: 42px!important;
+                }
+              }
+            }
+        }
+        &.is-collapse {
+            .el-menu {
+                &>.el-menu-item {
+                  &.is-active {
+                    &>.el-tooltip {
+                      padding-left: 5px!important;
+                    }
+                  }
+                }
+            }
+        }
+    }
+  }
+  .main-content {
+    margin: 18px;
+    margin-top: 0;
+    padding: 0;
+    & > .el-breadcrumb {
+      height: auto;
+      margin: 10px 0;
+      padding: 0;
+      background: transparent;
+      box-shadow: none;
+      overflow: hidden;
+    }
+    & > div {
+      height: calc(100% - 34px);
+      padding: 20px;
+      background: #fff;
+      box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
+      border-radius: 2px;
+      overflow-y: auto;
+    }
+  }
+}

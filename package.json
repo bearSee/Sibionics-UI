@@ -1,0 +1,580 @@
+{
+  "name": "sibionics-ui",
+  "description": "A Component Library for Vue.js based on element-ui.",
+  "author": "BearSee",
+  "homepage": "http://www.bearsee.com.cn/sibionics-ui/#/install",
+  "private": false,
+  "main": "lib/sibionics.common.js",
+  "style": "lib/sibionics.css",
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "serve": "npm run lib && npm run build:scss && npm run build:utils && vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "build:utils": "babel src/utils --out-dir lib/utils --ignore src/utils/common",
+    "build:filters": "babel src/filters --out-dir lib/filters --ignore src/filters/index.js",
+    "build:scss": "cp-cli packages/theme-chalk/src lib/theme-chalk",
+    "build:theme": "gulp build --gulpfile packages/theme-chalk/gulpfile.js && cp-cli packages/theme-chalk/lib lib/theme-chalk",
+    "build:demo": "vue-cli-service build --mode release",
+    "lib": "vue-cli-service build --target lib --name sibionics --dest lib src/index.js --no-clean",
+    "dist": "npm run lib && npm run build:scss && npm run build:utils && npm publish && npm run build:demo",
+    "lint": "vue-cli-service lint"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.10.5",
+    "core-js": "^3.6.5",
+    "crypto-js": "^4.0.0",
+    "echarts": "^5.1.2",
+    "element-ui": "^2.15.6",
+    "jsencrypt": "^3.2.0",
+    "node-rsa": "^1.1.1",
+    "qs": "^6.9.1",
+    "regenerator-runtime": "^0.13.5",
+    "resize-observer-polyfill": "^1.5.1",
+    "throttle-debounce": "^2.1.0",
+    "vue-i18n": "^5.0.3"
+  },
+  "peerDependencies": {
+    "vue": "^2.6.10"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.10.5",
+    "@babel/core": "^7.10.5",
+    "@babel/plugin-transform-runtime": "^7.10.5",
+    "@babel/preset-env": "^7.10.4",
+    "@vue/cli-plugin-babel": "^4.1.0",
+    "@vue/cli-plugin-eslint": "^4.1.0",
+    "@vue/cli-service": "^4.1.0",
+    "@vue/eslint-config-airbnb": "^5.0.0",
+    "animate.css": "^4.1.0",
+    "axios": "^0.19.0",
+    "babel-eslint": "^8.2.1",
+    "cp-cli": "^2.0.0",
+    "sibionics-ui": "0.1.1",
+    "eslint": "^5.16.0",
+    "eslint-plugin-vue": "^5.0.0",
+    "gulp": "^4.0.2",
+    "gulp-autoprefixer": "^7.0.1",
+    "gulp-cssmin": "^0.2.0",
+    "gulp-postcss": "^8.0.0",
+    "gulp-sass": "^4.0.2",
+    "js-cookie": "^2.2.1",
+    "lint-staged": "^9.4.3",
+    "postcss-pxtorem": "^5.1.1",
+    "sass": "~1.32.6",
+    "sass-loader": "^8.0.0",
+    "vue": "^2.6.10",
+    "vue-cookies": "^1.6.0",
+    "vue-echarts": "^4.1.0",
+    "vue-i18n": "^8.15.1",
+    "vue-router": "^3.1.3",
+    "vue-template-compiler": "^2.6.10",
+    "webpack-merge": "^4.2.2",
+    "webpack-node-externals": "^1.7.2",
+    "webpack-theme-color-replacer": "^1.3.2"
+  },
+  "gitHooks": {
+    "pre-commit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.{js,vue}": [
+      "vue-cli-service lint",
+      "git add"
+    ]
+  },
+  "version": "1.2.8",
+  "versionTips": [
+    {
+      "version": "1.2.8",
+      "time": "2022-05-17",
+      "tips": [
+        "Form 组件联动表单初始展示默认值时被清空的Bug修复",
+        "Form 组件表单项配置支持通过 minWidth 配置最小宽度"
+      ]
+    },
+    {
+      "version": "1.2.5",
+      "time": "2022-05-17",
+      "tips": [
+        "Item 组件 type=inputrange 类型的表单元素值变更导致form数据重置Bug修复"
+      ]
+    },
+    {
+      "version": "1.2.3",
+      "time": "2022-05-17",
+      "tips": [
+        "Calculator 组件Bug修复",
+        "Form 组件提供 getValidateStatus 方法供外部通过 refs 调用，获取表单当前校验状态"
+      ]
+    },
+    {
+      "version": "1.2.1",
+      "time": "2022-05-13",
+      "tips": [
+        "Upload 组件传入默认值后页面卡死的Bug修复",
+        "TablePicker 组件抛出isPagination是否需要分页的控制属性"
+      ]
+    },
+    {
+      "version": "1.2.0",
+      "time": "2022-05-10",
+      "tips": [
+        "Item 组件新增 type = cascader 类型控件（级联选择器）",
+        "示例文档说明整体优化"
+      ]
+    },
+    {
+      "version": "1.1.68",
+      "time": "2022-05-08",
+      "tips": [
+        "Upload 组件bug修复、API 完善",
+        "其他功能优化"
+      ]
+    },
+    {
+      "version": "1.1.67",
+      "time": "2022-05-07",
+      "tips": [
+        "Table 新增设定某一行为选中行的Refs方法",
+        "Table 新增可高亮展示当前行的属性"
+      ]
+    },
+    {
+      "version": "1.1.66",
+      "time": "2022-04-26",
+      "tips": [
+        "新增 Formula 公式构造器组件",
+        "demo 调试入口新增",
+        "其他问题修复优化"
+      ]
+    },
+    {
+      "version": "1.1.64",
+      "time": "2022-04-19",
+      "tips": [
+        "Form、Table 组件中的表单项配置新增 relationResults 字段，支持自定义运算规则，自动计算结果",
+        "Form、Table 组件公共逻辑抽离",
+        "window.SIB 对象新增 repairAccuracy 数值计算精度处理方法",
+        "其他问题优化"
+      ]
+    },
+    {
+      "version": "1.1.63",
+      "time": "2022-04-15",
+      "tips": [
+        "Form 表单组件自定义校验规则失效的bug修复",
+        "Item 表单组件请求下拉数据接口时，使用get请求未自动拼接参数的bug修复"
+      ]
+    },
+    {
+      "version": "1.1.61",
+      "time": "2022-04-01",
+      "tips": [
+        "Calculator 计算器组件与 Vue 解耦合，修改为纯js插件"
+      ]
+    },
+    {
+      "version": "1.1.60",
+      "time": "2022-03-31",
+      "tips": [
+        "新增 Calculator 计算器组件",
+        "新增 Calculator 计算器组件 demo 示例",
+        "Item 组件的数值输入框（type为number）和数值连接输入框（type为numberrange）植入 Calculator 计算器组件模块"
+      ]
+    },
+    {
+      "version": "1.1.59",
+      "time": "2022-03-24",
+      "tips": [
+        "Table 组件各列支持自定义排序字段的内容",
+        "完善文档相关示例的说明",
+        "其他优化"
+      ]
+    },
+    {
+      "version": "1.1.58",
+      "time": "2022-03-23",
+      "tips": [
+        "调整 npm 打包文件，优化打包体积，修改 utils 挂载方式"
+      ]
+    },
+    {
+      "version": "1.1.57",
+      "time": "2022-03-03",
+      "tips": [
+        "修复 Table 表格组件、Form 表单组件中清空时间连接框的值，未同步清空起始字段和截止字段的值的相关bug",
+        "check复选框勾选一个选项触发全选的bug修复"
+      ]
+    },
+    {
+      "version": "1.1.53",
+      "time": "2022-03-03",
+      "tips": [
+        "Table 组件新增支持自定义表格列头插槽",
+        "Table 组件代码逻辑优化",
+        "Item 组件bug修复"
+      ]
+    },
+    {
+      "version": "1.1.51",
+      "time": "2022-03-01",
+      "tips": [
+        "表单重置时，弹窗类型组件 formatValue 不展示的 bug 修复"
+      ]
+    },
+    {
+      "version": "1.1.50",
+      "time": "2022-02-28",
+      "tips": [
+        "Table 组件和 Form 组件新增表单联动功能，支持在表单配置项对应表单元素配置 relationships 来动态控制所关联得表单元素的值和接口调用"
+      ]
+    },
+    {
+      "version": "1.1.48",
+      "time": "2022-02-18",
+      "tips": [
+        "Table 组件 传入接口请求数据时，支持使用 totalCallback 自定义数据总数"
+      ]
+    },
+    {
+      "version": "1.1.47",
+      "time": "2022-01-25",
+      "tips": [
+        "Table 组件 通过传入 tableData 渲染表格时，更新 tableData 无法重新计算表格高度问题修复"
+      ]
+    },
+    {
+      "version": "1.1.45",
+      "time": "2022-01-24",
+      "tips": [
+        "Item 组件 text 类型输入框支持配置 prefixText、suffixText 来控制输入框前后展示默认文本"
+      ]
+    },
+    {
+      "version": "1.1.43",
+      "time": "2022-01-22",
+      "tips": [
+        "Table 组件传入默认排序参数无效问题修复"
+      ]
+    },
+    {
+      "version": "1.1.42",
+      "time": "2022-01-21",
+      "tips": [
+        "charts 组件随宽度变化更新视图"
+      ]
+    },
+    {
+      "version": "1.1.39",
+      "time": "2022-01-15",
+      "tips": [
+        "Table 组件拓展性优化"
+      ]
+    },
+    {
+      "version": "1.1.35",
+      "time": "2022-01-04",
+      "tips": [
+        "Item 组件抛出的 item-change 事件在清空输入框未正常执行的问题修复",
+        "Item 组件 props.valueType 为 number 时，支持配置 props.precision 控制数值精度(小数位数)"
+      ]
+    },
+    {
+      "version": "1.1.32",
+      "time": "2021-12-30",
+      "tips": [
+        "Item 组件 textarea 类型表单控件 reasize 属性无效bug修复",
+        "Item 组件 label 类型表单控件新增支持根据换行符换行的功能"
+      ]
+    },
+    {
+      "version": "1.1.31",
+      "time": "2021-12-29",
+      "tips": [
+        "Form 组件新增 enterable 控制是否支持敲回车提交表单",
+        "Table 组件新增 enterable 控制是否支持敲回车查询列表",
+        "Table 组件新增 sortable 控制是否支持排序",
+        "适配不同机型不同分辨率下展示的组件尺寸和样式"
+      ]
+    },
+    {
+      "version": "1.1.29",
+      "time": "2021-12-29",
+      "tips": [
+        "Form 组件必填校验优化"
+      ]
+    },
+    {
+      "version": "1.1.26",
+      "time": "2021-12-25",
+      "tips": [
+        "Item 组件新增可配置 unit 单位框功能",
+        "Form 组件抛出表单元素手动变更后的 form-item-change 方法"
+      ]
+    },
+    {
+      "version": "1.1.25",
+      "time": "2021-12-24",
+      "tips": [
+        "新增下载附件 window.SIB.download 方法",
+        "Form 组件优化"
+      ]
+    },
+    {
+      "version": "1.1.21",
+      "time": "2021-12-22",
+      "tips": [
+        "修复 Item 组件获取默认值错误的bug",
+        "公共样式优化"
+      ]
+    },
+    {
+      "version": "1.1.21",
+      "time": "2021-12-20",
+      "tips": [
+        "修复 Table 组件传入 tableData 并变更 tableData 时，分页器不刷新条目数量的bug"
+      ]
+    },
+    {
+      "version": "1.1.19",
+      "time": "2021-12-20",
+      "tips": [
+        "修复 Table 组件勾选数据后，刷新列表未清空勾选"
+      ]
+    },
+    {
+      "version": "1.1.17",
+      "time": "2021-12-17",
+      "tips": [
+        "修复 Item 组件的 password 密码框鼠标悬停展示密码内容"
+      ]
+    },
+    {
+      "version": "1.1.14",
+      "time": "2021-12-15",
+      "tips": [
+        "修复 Table 组件配置接口自动请求数据时，未配置分页组件，出现无法展示全部数据的bug",
+        "table-picker、tree-picker 支持传入 width 设置弹窗宽度"
+      ]
+    },
+    {
+      "version": "1.1.13",
+      "time": "2021-12-14",
+      "tips": [
+        "修复 Item 组件下拉类型的表单元素，初始值为null时导致报错",
+        "window.SIB.isMobilePhone 校验空字符串时为 true 的bug修复",
+        "table-picker 组件支持传入 width 设置弹窗宽度"
+      ]
+    },
+    {
+      "version": "1.1.12",
+      "time": "2021-12-13",
+      "tips": [
+        "Table 组件通过接口获取完数据后，抛出 finish-search 方法",
+        "修复 Form 组件 label-position 配置为 top 时，loading遮罩不消失的 bug"
+      ]
+    },
+    {
+      "version": "1.1.10",
+      "time": "2021-12-08",
+      "tips": [
+        "修复 Table 组件勾选数据后换页，重新点击查询未清空之前的选中"
+      ]
+    },
+    {
+      "version": "1.1.9",
+      "time": "2021-12-08",
+      "tips": [
+        "弹窗组件滚动条样式优化",
+        "Table 组件搜索表单值变更时，抛出方法"
+      ]
+    },
+    {
+      "version": "1.1.6",
+      "time": "2021-12-01",
+      "tips": [
+        "Table 组件开放 tree-props 渲染嵌套数据的配置选项"
+      ]
+    },
+    {
+      "version": "1.1.5",
+      "time": "2021-11-26",
+      "tips": [
+        "全局 rem 单位处理",
+        "Form 组件按钮组位置动态调整位置"
+      ]
+    },
+    {
+      "version": "1.1.2",
+      "time": "2021-11-26",
+      "tips": [
+        "Table 组件配置不分页的后台接口时，自动前端分页"
+      ]
+    },
+    {
+      "version": "1.1.1",
+      "time": "2021-11-19",
+      "tips": [
+        "Form 组件变更 itemInfo 传参时，初始化表单数据会保留已编辑数据",
+        "其他优化"
+      ]
+    },
+    {
+      "version": "1.1.0",
+      "time": "2021-11-16",
+      "tips": [
+        "Table 组件 expand 功能完善",
+        "textarea 组件敲回车会提交表单bug修复"
+      ]
+    },
+    {
+      "version": "1.0.7",
+      "time": "2021-11-15",
+      "tips": [
+        "text、password 组件支持配置 trim 属性来选择是否过滤空格",
+        "time 组件校验bug修复"
+      ]
+    },
+    {
+      "version": "1.0.4",
+      "time": "2021-11-11",
+      "tips": [
+        "text 文本输入框组件支持 valueType 属性",
+        "Form 组件支持配置 labelTips 进行提示",
+        "样式及其他配置优化"
+      ]
+    },
+    {
+      "version": "1.0.3",
+      "time": "2021-11-09",
+      "tips": [
+        "新增 isMobilePhone、isTelephone、isEmail、isURL、isIdentityCode、verificationRules 等校验方法",
+        "menu 组件支持配置取消绑定 router 自动跳转"
+      ]
+    },
+    {
+      "version": "1.0.2",
+      "time": "2021-11-05",
+      "tips": [
+        "Form 表单 inputrange、numberrange 类型表单元素校验bug修复"
+      ]
+    },
+    {
+      "version": "1.0.1",
+      "time": "2021-11-04",
+      "tips": [
+        "demo 国际化配置"
+      ]
+    },
+    {
+      "version": "1.0.0",
+      "time": "2021-11-03",
+      "tips": [
+        "form、table 组件表单元素宽度动态计算校准",
+        "Form 组件新增 border 示例的使用"
+      ]
+    },
+    {
+      "version": "0.2.1",
+      "time": "2021-11-03",
+      "tips": [
+        "utils/prototype 原型方法默认挂载，不再需要手动引入"
+      ]
+    },
+    {
+      "version": "0.2.0",
+      "time": "2021-11-03",
+      "tips": [
+        "i18n 国际化配置兼容处理",
+        "删除多余样式打包配置",
+        "样式引用路径调整"
+      ]
+    },
+    {
+      "version": "0.1.65",
+      "time": "2021-11-02",
+      "tips": [
+        "i18n 国际化注册方式调整",
+        "Table 组件滚动条保持表头固定",
+        "Table 组件新增对序号列宽度进行调整",
+        "menu 组件新增 collapsed 参数控制初始折叠状态",
+        "组件样式调整"
+      ]
+    },
+    {
+      "version": "0.1.64",
+      "time": "2021-11-01",
+      "tips": [
+        "Table 组件 tableData、requestConfig 变更后自动刷新列表",
+        "Item 组件下拉类型表单元素请求空接口的问题修复"
+      ]
+    },
+    {
+      "version": "0.1.63",
+      "time": "2021-10-29",
+      "tips": [
+        "Table 组件 loading 位置居中调整",
+        "numberrange 示例文档 type 可选值错误修改",
+        "入口改成 lib/sibionics.common.js",
+        "依赖打包文件错误调试",
+        "组件国际化完善"
+      ]
+    },
+    {
+      "version": "0.1.62",
+      "time": "2021-10-28",
+      "tips": [
+        "Table 组件删除 totalSize 属性",
+        "table、form 组件按钮添加防抖功能",
+        "组件安装逻辑优化",
+        "示例说明错误修改"
+      ]
+    },
+    {
+      "version": "0.1.60",
+      "time": "2021-10-27",
+      "tips": [
+        "整体打包配置优化",
+        "样式打包失败问题修复"
+      ]
+    },
+    {
+      "version": "0.1.59",
+      "time": "2021-10-26",
+      "tips": [
+        "Item 表单元素组件（select 下拉框）支持搜索、远程搜索、自定义搜索",
+        "menu 样式调整",
+        "README.md 新增文档地址"
+      ]
+    },
+    {
+      "version": "0.1.58",
+      "time": "2021-10-25",
+      "tips": [
+        "Form 表单组件，动态计算表单元素宽度的规则变更",
+        "Table 组件搜索框模块，表单元素依据 label 宽度动态调整功能新增",
+        "组件库演示示例展示了错误代码的问题修复"
+      ]
+    },
+    {
+      "version": "0.1.57",
+      "time": "2021-10-21",
+      "tips": [
+        "index-page 页面样式调整",
+        "el-dialog 弹窗公共样式调整",
+        "Form 表单提交、重置按钮位置互换，提交在左，重置在右",
+        "组件库说明页面部分示例存在错误的修正，所有表单子元素列表说明更正"
+      ]
+    },
+    {
+      "version": "0.1.56",
+      "time": "2021-10-21",
+      "tips": [
+        "新增 window.SIB.getuuid、window.SIB.deepCopy 等方法",
+        "优化获取日期 getCertainDate 方法，支持传入日期格式化规则",
+        "新增组件库说明（安装、快速上手、国际化、自定义主题色、内置指令、utils 插件、内置filter过滤方式、内置过渡动画、版本更新等页面）"
+      ]
+    }
+  ]
+}

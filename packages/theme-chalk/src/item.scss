@@ -1,0 +1,106 @@
+
+.sib-item {
+  position: relative;
+  background-color: transparent;
+  width: 100%;
+  & > div {
+      width: 100%;
+  }
+  &.has-unit {
+    display: flex;
+    .unit {
+        min-width: 50px;
+        max-width: 100px;
+        padding: 0 5px;
+        box-sizing: border-box;
+        margin: auto 0;
+        margin-left: 5px;
+        text-align: center;
+        border-radius: 4px;
+        background: #dbdbdb;
+        color: #666666;
+        font-size: 12px;
+        width: auto;
+        word-break: keep-all;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        line-height: 30px;
+    }
+  }
+  .text-label {
+      display: block;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      margin-top: 6px;
+      line-height: 1.5;
+  }
+  .text-input {
+    display: flex;
+    flex: 1 0;
+    .suffix-text, .prefix-text {
+      max-width: 100px;
+      font-size: 12px;
+      color: #666;
+      margin: auto 0;
+    }
+    .suffix-text {
+      margin-left: 5px;
+    }
+    .prefix-text {
+      margin-right: 5px;
+    }
+    .el-input {
+      flex: 1 1;
+    }
+  }
+  .el-date-editor--time, .el-date-editor--timerange, .el-date-editor--time-select {
+    width: 100%;
+    flex: 1 0;
+  }
+
+  .sib-input-number {
+    display: flex;
+    flex: 1 0;
+    align-items: flex-end;
+    .el-input-number {
+      width: 100%;
+    }
+    &.show-calculator {
+      .el-input-number {
+        width: calc(100% - 25px);
+        margin-right: 5px;
+      }
+    }
+    .calculator-icon {
+      width: 20px;
+      height: 20px;
+      font-size: 20px;
+      color: #333;
+      cursor: pointer;
+      &:hover {
+        color: #666;
+      }
+      &:active {
+        color: #999;
+      }
+    }
+  }
+  .item-inputrange, .item-numberrange, .item-time-range {
+    display: flex;
+    flex: 1 0;
+    .el-input, .sib-input-number {
+      width: 100%;
+    }
+    &>.line {
+      margin: auto 0;
+      text-align: center;
+    }
+  }
+  .el-textarea .el-input__count {
+    bottom: -25px;
+    right: 0;
+    background: transparent;
+  }
+}

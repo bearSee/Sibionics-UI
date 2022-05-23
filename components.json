@@ -1,0 +1,16 @@
+{
+  "calculator": "./packages/calculator/index.js",
+  "formula": "./packages/formula/index.js",
+  "charts": "./packages/charts/index.js",
+  "download": "./packages/download/index.js",
+  "dropdown": "./packages/dropdown/index.js",
+  "form": "./packages/form/index.js",
+  "item": "./packages/item/index.js",
+  "menu": "./packages/menu/index.js",
+  "sib-index-page": "./packages/sib-index-page/index.js",
+  "table": "./packages/table/index.js",
+  "table-picker": "./packages/table-picker/index.js",
+  "throttle": "./packages/throttle/index.js",
+  "tree": "./packages/tree/index.js",
+  "tree-picker": "./packages/tree-picker/index.js"
+}

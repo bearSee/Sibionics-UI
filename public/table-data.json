@@ -1,0 +1,64 @@
+{
+    "data": {
+        "records": [
+            {
+                "name": "小策",
+                "code": "000",
+                "sex": "男",
+                "age": 18,
+                "height": 165,
+                "status": 0,
+                "avatar": "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
+                "id": "0",
+                "rowId": "0" 
+            },
+            {
+                "name": "张三",
+                "code": "001",
+                "sex": "男",
+                "age": 26,
+                "height": 175,
+                "status": 1,
+                "avatar": "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
+                "id": "1",
+                "rowId": "1"
+            },
+            {
+                "name": "奔跑的提款机",
+                "code": "666",
+                "sex": "男",
+                "age": 28,
+                "height": 185,
+                "status": 1,
+                "avatar": "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
+                "id": "2",
+                "rowId": "2"
+            },
+            {
+                "name": "菜鸟",
+                "code": "005",
+                "sex": "女",
+                "age": 12,
+                "height": 155,
+                "status": 0,
+                "avatar": "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
+                "id": "3",
+                "rowId": "3"
+            },
+            {
+                "name": "接口拿数据",
+                "code": "007",
+                "sex": "男",
+                "age": 19,
+                "height": 155,
+                "status": 0,
+                "avatar": "https://cube.elemecdn.com/0/88/4a731a90594a4af544c0c25941171jpeg.png",
+                "id": "4",
+                "rowId": "4"
+            }
+        ],
+        "totalCount": 5
+    },
+    "code": 200,
+    "message": ""
+}

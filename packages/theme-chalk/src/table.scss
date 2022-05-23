@@ -1,0 +1,94 @@
+@import "common/theme.scss";
+
+
+.sib-table {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  .search-body {
+    .el-form-item {
+      margin-right: 0;
+      padding-right: 10px;
+      box-sizing: border-box;
+      .el-form-item__content {
+        width: calc(100% - 110px);
+        .el-date-editor {
+          width: 100%;
+        }
+      }
+    }
+    .show-more {
+      text-align: center;
+      color: $theme;
+      .search_text {
+        cursor: pointer;
+        font-size: 12px;
+        margin-right: 10px;
+      }
+    }
+    .button-list {
+      text-align: right;
+      padding-right: 10px;
+      margin-bottom: 0;
+      box-sizing: border-box;
+      .el-form-item__content {
+        width: 100%;
+      }
+    }
+  }
+  .content-body {
+    margin: 5px 0 10px;
+  }
+  .table-body {
+    flex: 1 1 auto;
+    overflow-y: hidden;
+    .el-table {
+      height: 100%;
+      .el-table__body-wrapper {
+        height: calc(100% - 40px);
+        overflow-y: auto;
+      }
+      .el-table__body-wrapper .el-table__body {
+        tr .el-table-column--selection .cell {
+          padding-left: 10px;
+          padding-right: 10px;
+        }
+      }
+    }
+  }
+  .pagination-body {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+      .el-pagination {
+        text-align: right;
+        padding-right: 0;
+        .btn-next {
+          margin-right: 0;
+        }
+      }
+      .select-tip-box {
+          font-size: 14px;
+          color: #444;
+          &>span {
+              margin-right: 15px;
+          }
+          .el-button span {
+              font-size: 14px;
+          }
+      }
+  }
+}
+
+// 复制样式
+.tooltip-copy {
+  border: 0!important;
+  padding: 0!important;
+  .el-button--mini {
+    padding: 4px 8px!important;
+  }
+}
+.el-tooltip__popper {
+  word-break: break-all;
+  max-width: 400px;
+}

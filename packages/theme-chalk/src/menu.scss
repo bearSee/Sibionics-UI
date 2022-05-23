@@ -1,0 +1,44 @@
+@import "common/theme.scss";
+
+.sib-menu {
+    .collapse-control {
+        cursor: pointer;
+        text-align: right;
+        color: #555;
+        transition: .4s;
+        background: #fff;
+        padding: 5px;
+        display: flex;
+        justify-content: flex-end;
+        box-sizing: border-box;
+        border-right: solid 1px #e6e6e6;
+        i {
+            font-size: 24px;
+        }
+        span {
+            font-size: 14px;
+            margin: auto 0;
+        }
+    }
+    &.is-collapse {
+        .collapse-control {
+            width: 51px;
+            i {
+                margin: auto;
+            }
+        }
+        .el-menu {
+            width: 50px;
+            .el-submenu {
+                .el-submenu__title {
+                    padding-left: 0!important;
+                    padding: 0 13px!important;
+                }
+            }
+            .el-menu-item .el-tooltip {
+                padding-left: 0!important;
+                padding: 0 13px!important;
+            }
+        }
+    }
+}

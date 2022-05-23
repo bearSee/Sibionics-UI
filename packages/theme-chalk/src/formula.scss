@@ -1,0 +1,200 @@
+
+.sib-formula {
+  width: calc(79px * 4 + 120px);
+  min-width: calc(79px * 4 + 120px);
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .1);
+  color: #000000;
+  position: relative;
+  -moz-user-select:none;/*火狐*/
+  -webkit-user-select:none;/*webkit浏览器*/
+  -ms-user-select:none;/*IE10*/
+  -khtml-user-select:none;/*早期浏览器*/
+  .formula-container {
+    background: #f1f0f2;
+    width: 100%;
+    .header-formula {
+        text-align: right;
+        padding: 10px;
+        max-width: 100%;
+        #formula {
+            font-size: 20px!important;
+            height: 45px;
+            margin-top: 15px;
+            overflow-x: auto;
+            overflow-y: hidden;
+        }
+        .c-number {
+            font-size: 32px;
+            height: 40px;
+            font-weight: 600;
+        }
+    }
+    .container-operation {
+        display: flex;
+        .operation-box {
+            display: flex;
+            flex-wrap: wrap;
+            width: calc(79px * 4);
+            min-width: calc(79px * 4);
+            .symbol {
+                width: 77px;
+                height: 46px;
+                margin: 1px;
+                background: #f6f6f6;
+                font-size: 17px;
+                font-family: 'math';
+                cursor: pointer;
+                user-select:none;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                &:hover {
+                    background: #ddd;
+                }
+                &:active {
+                    background: #cbcbcb;
+                }
+            }
+            .symbol-operation {
+                &.equal {
+                    background: #f7db91;
+                    font-size: 16px;
+                    font-weight: 400;
+                    color: #606266!important;
+                    &:hover {
+                        background: #fbca49;
+                    }
+                    &:active {
+                        background: #ffb900;
+                    }
+                }
+            }
+            .symbol-number {
+                background: #fdfdfd;
+                font-weight: 600;
+            }
+            .large-font {
+                font-size: 25px;
+                font-weight: 300;
+            }
+            .mini-font {
+                font-size: 13px;
+            }
+            .font-normal {
+                font-weight: 500;
+            }
+            .symbol-render {
+                width: 100%;
+                height: 100%;
+                display: flex;
+                justify-content: center;
+                margin: auto;
+                .symbol-backspace {
+                    margin: auto;
+                    display: flex;
+                    .backspace-icon-l {
+                        width: 9px;
+                        height: 9px;
+                        border: 1px solid #323232;
+                        border-width: 0 0 1px 1px;
+                        position: relative;
+                        right: -5px;
+                        transform: rotate(45deg);
+                        margin: auto 0;
+                    }
+                    .backspace-icon-r {
+                        width: 13px;
+                        height: 13px;
+                        line-height: 8px;
+                        font-size: 12px;
+                        border: 1px solid #323232;
+                        border-radius: 0 2px 2px 0;
+                        border-left: 0;
+                        margin: auto 0;
+                        text-align: center;
+                    }
+                }
+            }
+        }
+        .formula-variable {
+            width: 120px;
+            min-width: 120px;
+            height: 336px;
+            background: #fff;
+            display: flex;
+            flex-direction: column;
+            .variable-list {
+                margin: 1px;
+                height: calc(100% - 42px);
+                display: flex;
+                flex-direction: column;
+                overflow-y: auto;
+                .el-button {
+                    margin: 1px;
+                    position: relative;
+                    .del {
+                        position: absolute;
+                        right: 0;
+                        top: 2px;
+                    }
+                }
+            }
+            .formula-test-btn {
+                height: 46px;
+                margin: 1px;
+            }
+        }
+    }
+  }
+  .variable-dialog {
+    position: absolute;
+    .el-drawer__body {
+        padding: 0 20px 20px 20px;
+        /*竖向滚动条样式*/
+        &::-webkit-scrollbar {
+            width: 6px;
+            background: #f8f8f8;
+        }
+        &::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+            border-radius: 3px;
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+            background: rgba(144, 147, 153, 0.2);
+        }
+        &::-webkit-scrollbar-track {/*滚动条里面轨道*/
+            border-radius: 3px;
+        }
+    }
+    &.test-variable-dialog {
+        .el-drawer__body {
+            padding: 20px;
+            padding-top: 30px;
+            display: block;
+            .button-list {
+                display: none;
+            }
+            .test-formula,.test-result {
+                display: flex;
+                .t-value {
+                    max-width: calc(100% - 70px);
+                    word-break: break-all;
+                }
+            }
+            .test-result {
+                margin: 20px 0;
+                .t-label {
+                    margin: auto 0;
+                }
+                .t-value {
+                    color: red;
+                }
+            }
+            .test-btn-box {
+                text-align: right;
+            }
+        }
+    }
+  }
+  .v-modal {
+      position: absolute;
+  }
+}

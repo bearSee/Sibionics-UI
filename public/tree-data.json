@@ -1,0 +1,382 @@
+{
+    "code": 200,
+    "message": "Success",
+    "data": [
+        {
+            "id": 3,
+            "parentId": 0,
+            "name": "系统设置",
+            "sort": 3,
+            "selected": true,
+            "children": [
+                {
+                    "id": 13,
+                    "parentId": 3,
+                    "name": "账号管理",
+                    "sort": 1,
+                    "selected": true,
+                    "children": [
+                        {
+                            "id": 24,
+                            "parentId": 13,
+                            "name": "创建账号",
+                            "sort": 1,
+                            "selected": true,
+                            "children": null,
+                            "isMenu": 2
+                        },
+                        {
+                            "id": 25,
+                            "parentId": 13,
+                            "name": "编辑账号",
+                            "sort": 2,
+                            "selected": true,
+                            "children": null,
+                            "isMenu": 2
+                        },
+                        {
+                            "id": 26,
+                            "parentId": 13,
+                            "name": "修改密码",
+                            "sort": 3,
+                            "selected": true,
+                            "children": null,
+                            "isMenu": 2
+                        },
+                        {
+                            "id": 27,
+                            "parentId": 13,
+                            "name": "删除账号",
+                            "sort": 4,
+                            "selected": true,
+                            "children": null,
+                            "isMenu": 2
+                        },
+                        {
+                            "id": 28,
+                            "parentId": 13,
+                            "name": "账号列表",
+                            "sort": 5,
+                            "selected": true,
+                            "children": null,
+                            "isMenu": 2
+                        }
+                    ],
+                    "isMenu": 1
+                },
+                {
+                    "id": 14,
+                    "parentId": 3,
+                    "name": "角色管理",
+                    "sort": 2,
+                    "selected": true,
+                    "children": [
+                        {
+                            "id": 29,
+                            "parentId": 14,
+                            "name": "角色创建",
+                            "sort": 1,
+                            "selected": true,
+                            "children": null,
+                            "isMenu": 2
+                        },
+                        {
+                            "id": 30,
+                            "parentId": 14,
+                            "name": "角色编辑",
+                            "sort": 2,
+                            "selected": true,
+                            "children": null,
+                            "isMenu": 2
+                        },
+                        {
+                            "id": 31,
+                            "parentId": 14,
+                            "name": "角色删除",
+                            "sort": 3,
+                            "selected": true,
+                            "children": null,
+                            "isMenu": 2
+                        },
+                        {
+                            "id": 32,
+                            "parentId": 14,
+                            "name": "角色列表",
+                            "sort": 4,
+                            "selected": true,
+                            "children": null,
+                            "isMenu": 2
+                        }
+                    ],
+                    "isMenu": 1
+                },
+                {
+                    "id": 15,
+                    "parentId": 3,
+                    "name": "权限管理",
+                    "sort": 3,
+                    "selected": true,
+                    "children": [
+                        {
+                            "id": 33,
+                            "parentId": 15,
+                            "name": "权限明细",
+                            "sort": 1,
+                            "selected": true,
+                            "children": null,
+                            "isMenu": 2
+                        },
+                        {
+                            "id": 34,
+                            "parentId": 15,
+                            "name": "权限新增",
+                            "sort": 2,
+                            "selected": true,
+                            "children": null,
+                            "isMenu": 2
+                        },
+                        {
+                            "id": 35,
+                            "parentId": 15,
+                            "name": "权限编辑",
+                            "sort": 3,
+                            "selected": true,
+                            "children": null,
+                            "isMenu": 2
+                        },
+                        {
+                            "id": 36,
+                            "parentId": 15,
+                            "name": "权限删除",
+                            "sort": 4,
+                            "selected": true,
+                            "children": null,
+                            "isMenu": 2
+                        }
+                    ],
+                    "isMenu": 1
+                },
+                {
+                    "id": 65,
+                    "parentId": 3,
+                    "name": "任务推送配置\r\n\r\n",
+                    "sort": 4,
+                    "selected": null,
+                    "children": null,
+                    "isMenu": 1
+                }
+            ],
+            "isMenu": 1
+        },
+        {
+            "id": 1,
+            "parentId": 0,
+            "name": "首页",
+            "sort": 1,
+            "selected": true,
+            "children": [
+                {
+                    "id": 4,
+                    "parentId": 1,
+                    "name": "每日血糖",
+                    "sort": 1,
+                    "selected": true,
+                    "children": [
+                        {
+                            "id": 5,
+                            "parentId": 4,
+                            "name": "概况",
+                            "sort": 1,
+                            "selected": true,
+                            "children": [
+                                {
+                                    "id": 16,
+                                    "parentId": 5,
+                                    "name": "概况-明细",
+                                    "sort": 1,
+                                    "selected": true,
+                                    "children": null,
+                                    "isMenu": 2
+                                }
+                            ],
+                            "isMenu": 1
+                        },
+                        {
+                            "id": 6,
+                            "parentId": 4,
+                            "name": "饮食",
+                            "sort": 2,
+                            "selected": true,
+                            "children": [
+                                {
+                                    "id": 17,
+                                    "parentId": 6,
+                                    "name": "饮食-明细",
+                                    "sort": 1,
+                                    "selected": true,
+                                    "children": null,
+                                    "isMenu": 2
+                                }
+                            ],
+                            "isMenu": 1
+                        },
+                        {
+                            "id": 7,
+                            "parentId": 4,
+                            "name": "胰岛素针",
+                            "sort": 3,
+                            "selected": null,
+                            "children": [
+                                {
+                                    "id": 18,
+                                    "parentId": 7,
+                                    "name": "胰岛素针-明细",
+                                    "sort": 1,
+                                    "selected": null,
+                                    "children": null,
+                                    "isMenu": 2
+                                }
+                            ],
+                            "isMenu": 1
+                        },
+                        {
+                            "id": 8,
+                            "parentId": 4,
+                            "name": "胰岛素泵",
+                            "sort": 4,
+                            "selected": null,
+                            "children": [
+                                {
+                                    "id": 19,
+                                    "parentId": 8,
+                                    "name": "胰岛素泵-明细",
+                                    "sort": 1,
+                                    "selected": null,
+                                    "children": null,
+                                    "isMenu": 2
+                                }
+                            ],
+                            "isMenu": 1
+                        },
+                        {
+                            "id": 9,
+                            "parentId": 4,
+                            "name": "口服药",
+                            "sort": 5,
+                            "selected": true,
+                            "children": [
+                                {
+                                    "id": 20,
+                                    "parentId": 9,
+                                    "name": "口服药-明细",
+                                    "sort": 1,
+                                    "selected": true,
+                                    "children": null,
+                                    "isMenu": 2
+                                }
+                            ],
+                            "isMenu": 1
+                        },
+                        {
+                            "id": 10,
+                            "parentId": 4,
+                            "name": "运动",
+                            "sort": 6,
+                            "selected": null,
+                            "children": [
+                                {
+                                    "id": 21,
+                                    "parentId": 10,
+                                    "name": "运动-明细",
+                                    "sort": 1,
+                                    "selected": null,
+                                    "children": null,
+                                    "isMenu": 2
+                                }
+                            ],
+                            "isMenu": 1
+                        },
+                        {
+                            "id": 11,
+                            "parentId": 4,
+                            "name": "睡眠",
+                            "sort": 7,
+                            "selected": null,
+                            "children": [
+                                {
+                                    "id": 22,
+                                    "parentId": 11,
+                                    "name": "睡眠-明细",
+                                    "sort": 1,
+                                    "selected": null,
+                                    "children": null,
+                                    "isMenu": 2
+                                }
+                            ],
+                            "isMenu": 1
+                        },
+                        {
+                            "id": 12,
+                            "parentId": 4,
+                            "name": "身体状况",
+                            "sort": 8,
+                            "selected": null,
+                            "children": [
+                                {
+                                    "id": 23,
+                                    "parentId": 12,
+                                    "name": "身体状况-明细",
+                                    "sort": 1,
+                                    "selected": null,
+                                    "children": null,
+                                    "isMenu": 2
+                                }
+                            ],
+                            "isMenu": 1
+                        }
+                    ],
+                    "isMenu": 1
+                }
+            ],
+            "isMenu": 1
+        },
+        {
+            "id": 2,
+            "parentId": 0,
+            "name": "工作台",
+            "sort": 2,
+            "selected": true,
+            "children": [
+                {
+                    "id": 48,
+                    "parentId": 2,
+                    "name": "算法标注",
+                    "sort": 1,
+                    "selected": true,
+                    "children": [
+                        {
+                            "id": 49,
+                            "parentId": 48,
+                            "name": "标注任务",
+                            "sort": 1,
+                            "selected": true,
+                            "children": null,
+                            "isMenu": 1
+                        },
+                        {
+                            "id": 50,
+                            "parentId": 48,
+                            "name": "二分类算法",
+                            "sort": 1,
+                            "selected": true,
+                            "children": null,
+                            "isMenu": 1
+                        }
+                    ],
+                    "isMenu": 1
+                }
+            ],
+            "isMenu": 1
+        }
+    ]
+}

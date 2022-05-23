@@ -1,0 +1,57 @@
+@font-face {
+  font-family: "iconfont"; /* Project id  */
+  src: url('iconfont.ttf') format('truetype');
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  font-family: "iconfont" !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  vertical-align: baseline;
+  display: inline-block;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-a-wo:before {
+  content: "\100ab";
+}
+
+.icon-gongwenbao:before {
+  content: "\100ac";
+}
+
+.icon-cunchu:before {
+  content: "\100ad";
+}
+
+.icon-bofang:before {
+  content: "\100ae";
+}
+
+.icon-fujin:before {
+  content: "\100af";
+}
+
+.icon-dangan:before {
+  content: "\100b0";
+}
+
+.icon-cuxiao:before {
+  content: "\100b1";
+}
+
+.icon-guanjun:before {
+  content: "\100b2";
+}
+
+.icon-chakansousuo:before {
+  content: "\100b3";
+}
+

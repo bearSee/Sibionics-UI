@@ -1,0 +1,47 @@
+.sib-tree {
+  background-color: #fff;
+  height: 100%;
+  .el-input {
+    padding: 9px;
+    box-sizing: border-box;
+    .el-input__suffix {
+      right: 10px;
+    }
+  }
+  .tree-container {
+    height: calc(100% - 50px);
+    .el-scrollbar {
+      height: 100%;
+      .el-scrollbar__wrap {
+        overflow-x: auto;
+        .el-scrollbar__view {
+          min-width: 100%;
+          .el-tree {
+            min-width: 100%;
+            padding-bottom: 17px;
+            display: flex;
+            flex-direction: column;
+            .el-tree-node {
+              &.is-current>.el-tree-node__content {
+                background-color:#f5f7fa;
+              }
+            }
+          }
+          .el-tree>.el-tree-node {
+            min-width: 100%;
+            display: inline-block;
+          }
+        }
+      }
+      .el-scrollbar__bar.is-horizontal{
+        display: none !important;
+      }
+    }
+  }
+  .tree-actions {
+    font-size: 14px;
+    .el-button {
+      margin-left: 16px;
+    }
+  }
+}
