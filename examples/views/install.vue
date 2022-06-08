@@ -31,7 +31,7 @@ export default {
                 },
                 {
                     title: 'npm安装指定版本',
-                    code: 'npm i sibionics-ui@0.1.53 -S',
+                    code: 'npm i sibionics-ui@1.2.26 -S',
                 },
                 {
                     title: 'npm安装最新版本',

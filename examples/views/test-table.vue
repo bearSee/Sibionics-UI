@@ -750,6 +750,13 @@ export default {
                     defaultVal: '——',
                 },
                 {
+                    params: 'autoSearch',
+                    des: '如果通过接口请求列表数据，autoSearch 可控制初始渲染表格时是否去请求数据',
+                    type: 'Boolean',
+                    values: 'true, false',
+                    defaultVal: 'true',
+                },
+                {
                     params: 'requestConfig',
                     des: '接口请求配置项(如果使用接口请求表格数据，则tableData无效)',
                     type: 'Object',
@@ -834,6 +841,16 @@ export default {
                     name: 'form-item-change',
                     des: '搜索框的change事件',
                     params: 'value, info',
+                },
+                {
+                    name: 'before-search',
+                    des: '点击查询按钮抛出的方法',
+                    params: 'params(当前的查询参数)',
+                },
+                {
+                    name: 'search',
+                    des: '获取tableData时抛出的方法',
+                    params: 'params(当前的查询参数)',
                 },
                 {
                     name: 'finish-search',

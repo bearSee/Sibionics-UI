@@ -22,7 +22,7 @@
         :menus="menus"
       />
     </example>
-    <!-- <sib-index-page :custom-menus="menus" /> -->
+    <!-- <sib-index-page :menus="menus" /> -->
     <config-table :table-data="tableData" />
     <config-table
       step="events"

@@ -86,9 +86,31 @@ const router = new Router({
           component: () => import('./views/test-menu'),
         },
         {
-            name: 'Dropdown 下拉菜单',
-            path: '/Dropdown',
-            component: () => import('./views/test-dropdown'),
+          path: '/index-page',
+          name: 'IndexPage 菜单主页',
+          component: () => import('./views/test-index-page'),
+          children: [
+            {
+              path: '/index-page/calculator',
+              name: 'Calculator 计算器',
+              component: () => import('./views/test-calculator'),
+            },
+            {
+              path: '/index-page/table',
+              name: 'Table 表格',
+              component: () => import('./views/test-table'),
+            },
+          ],
+        },
+        {
+          path: '/common-page',
+          name: 'CommonPage 公用列表页',
+          component: () => import('./views/test-common-page'),
+        },
+        {
+          name: 'Dropdown 下拉菜单',
+          path: '/Dropdown',
+          component: () => import('./views/test-dropdown'),
         },
         {
           path: '/table',

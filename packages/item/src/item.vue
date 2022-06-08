@@ -208,13 +208,14 @@
       :size="props.size || size"
       :clearable="props.clearable !== false"
       @clear="handlerClear"
-      @change="handlerSelectChange">
+      @change="handlerSelectChange"
+      @visible-change="handlerVisibleChange">
       <el-option
         v-for="item in (props.options || [])"
         :key="item[optionProps.key]"
         :label="item[optionProps.value]"
         :value="item[optionProps.key]"
-        :disabled="item.disabled" />
+        :disabled="item.disabled || props.disabled" />
     </el-select>
     <el-cascader
       ref="cascader"
@@ -256,7 +257,7 @@
         :title="item[optionProps.value]"
         :key="item[optionProps.key]"
         :label="item[optionProps.key]"
-        :disabled="props.disabled">
+        :disabled="item.disabled || props.disabled">
         {{ item[optionProps.value] }}
       </el-checkbox>
     </el-checkbox-group>
@@ -271,7 +272,7 @@
         :title="item[optionProps.value]"
         :key="item[optionProps.key]"
         :label="item[optionProps.key]"
-        :disabled="props.disabled">
+        :disabled="item.disabled || props.disabled">
         {{ item[optionProps.value] }}
       </el-radio>
     </el-radio-group>
@@ -401,6 +402,7 @@
       @change="handlerChange" />
     <el-upload
       v-else-if="props.type === 'upload'"
+      v-bind="props"
       :disabled="props.disabled"
       :action="props.action"
       :headers="{ ...uploadHeaders, ...(props.headers || {}) }"
@@ -409,7 +411,6 @@
       :show-file-list="props.showFileList"
       :list-type="props.listType || 'text'"
       :accept="props.accept"
-      :on-preview="props.onPreview"
       :on-success="uploadSuccess"
       :on-remove="uploadRemove"
       :before-upload="beforeUpload"
@@ -717,17 +718,22 @@ export default {
             }
         },
         beforeUpload(file) {
-            if (this.props.maxSize && file.size > (this.props.maxSize * 1024 * 1024)) {
-                this.$message.warning(this.$t('文件大小超过', { size: this.props.maxSize }));
+            const { maxSize, beforeUpload } = this.props;
+            if (maxSize && file.size > (maxSize * 1024 * 1024)) {
+                this.$message.warning(this.$t('文件大小超过', { size: maxSize }));
                 return false;
+            }
+            if (typeof beforeUpload === 'function') {
+                return beforeUpload(file);
             }
             this.file = file;
             return true;
         },
         uploadSuccess(res) {
+            const { onSuccess } = this.props;
             res.name = res.filename || res.name || this.file.name;
-            if (typeof this.props.onSuccess === 'function') {
-                res = this.props.onSuccess(res, this.file);
+            if (typeof onSuccess === 'function') {
+                res = onSuccess(res, this.file);
             }
             if (res) this.currentValue.push(res);
 
@@ -739,6 +745,7 @@ export default {
             // }
         },
         uploadRemove(file) {
+            if (typeof this.propsonRemove === 'function') this.props.onRemove(file);
             const index = this.currentValue.indexOf(file);
             this.currentValue.splice(index, 1);
         },
@@ -875,7 +882,9 @@ export default {
             });
         },
         handlerTextBlur(index) {
-            const { type, valueType, precision = 0 } = this.props;
+            const {
+                type, valueType, precision = 0, min, max,
+            } = this.props;
             if (['text', 'inputrange'].includes(type) && ['number', 'letter', 'letter-number'].includes(valueType)) {
                 const isRange = Object.prototype.toString.call(this.currentValue) === '[object Array]';
                 const originVal = isRange ? this.currentValue[index] : this.currentValue;
@@ -887,6 +896,8 @@ export default {
                     } else {
                         value = Number((number === 0 ? 0 : number).toFixed(precision));
                     }
+                    if ((max || max === 0) && value > max) value = Number(max);
+                    if ((min || min === 0) && value < min) value = Number(min);
                 }
                 if (valueType === 'letter') value = originVal.replace(/[^a-zA-Z]/ig, '');
                 if (valueType === 'letter-number') value = originVal.replace(/\W/ig, '');
@@ -895,13 +906,17 @@ export default {
             }
             this.handlerChange();
         },
+        handlerVisibleChange(show) {
+            this.$emit('visible-change', show);
+        },
         // type 为 cascader时，该方法用于获取选中的节点;(leafOnly) 是否只是叶子节点，默认值为 false
         getCheckedNodes(leafOnly) {
             return this.$refs.cascader && this.$refs.cascader.getCheckedNodes(leafOnly) || [];
         },
     },
     created() {
-        this.setDefaultValue(this.value || this.props.value);
+        const defaultVal = this.value === 0 ? 0 : (this.value || this.props.value);
+        this.setDefaultValue(defaultVal);
         this.setDefaultFormatValue(this.formatValue || this.props.formatValue);
     },
 };

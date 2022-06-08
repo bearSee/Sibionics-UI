@@ -764,6 +764,27 @@ export default {
                     defaultVal: '-',
                 },
                 {
+                    params: 'itemInfo[i].dataType',
+                    des: '声明该表单项的值类型（用于表单校验及下拉框数据匹配）',
+                    type: 'String',
+                    values: "'string'、'number'、'array'",
+                    defaultVal: '默认根据 表单数据对象(form) 或 该表单项配置的默认值(value) 来取该字段的值类型，取不到则将其视为 string 类型的值',
+                },
+                {
+                    params: 'itemInfo[i].startCode',
+                    des: '定义起始字段名称（type为 inputrange/numberrange/daterange/datetimerange/monthrange 类型的表单项生效）',
+                    type: 'String',
+                    values: '-',
+                    defaultVal: '-',
+                },
+                {
+                    params: 'itemInfo[i].endCode',
+                    des: '定义结束字段名称（type为 inputrange/numberrange/daterange/datetimerange/monthrange 类型的表单项生效）',
+                    type: 'String',
+                    values: '-',
+                    defaultVal: '-',
+                },
+                {
                     params: 'itemInfo[i].relationships',
                     des: '联动关系配置。该表单项的值变更时，其 relationships 所配置的字段key所对应的值将会清空，若value不为空，并且字段key对应的字段配置如果为接口请求的数据，将会把该表单项变更后的值当做参数，重新调用接口获取数据。',
                     type: 'String',

@@ -107,6 +107,14 @@ export default {
                             path: '/menu',
                         },
                         {
+                            name: 'IndexPage 菜单主页',
+                            path: '/index-page',
+                        },
+                        {
+                            name: 'CommonPage 公用列表页',
+                            path: '/common-page',
+                        },
+                        {
                             name: 'Dropdown 下拉菜单',
                             path: '/Dropdown',
                         },

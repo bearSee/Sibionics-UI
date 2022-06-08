@@ -29,7 +29,8 @@ import Tree from '../packages/tree';
 import TreePicker from '../packages/tree-picker';
 
 // 页面级组件
-import SibIndexPage from '../packages/sib-index-page';
+import indexPage from '../packages/index-page';
+import commonPage from '../packages/common-page';
 
 import directives from './directives';
 import filters from './filters';
@@ -49,7 +50,8 @@ const components = [
   Throttle,
   Tree,
   TreePicker,
-  SibIndexPage,
+  indexPage,
+  commonPage,
 ];
 
 function install(Vue, opts = {}) {

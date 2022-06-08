@@ -1,7 +1,6 @@
 <template>
   <div
     class="sib-form"
-    v-loading="isCalculating"
     :class="{
       'border': border,
       'is-disabled': disabled,
@@ -18,7 +17,7 @@
       <template v-for="info of itemInfo">
         <el-form-item
           ref="formItems"
-          :class="[info.code + '-temp sib-form__temp', info.labelTips ? 'sib-form-tips__temp' : '']"
+          :class="[info.code + '-temp sib-form__temp', info.labelTips ? 'sib-form-tips__temp' : '', isCalculated && 'is-calculated']"
           :key="info.code"
           :title="$t(info.labelTips || info.label || '')"
           :style="info.width ? `width: ${info.width};min-width:${info.minWidth || 'auto'}` : `width: calc(${widthPercent}% - ${border && 1.5 || 10}px);min-width:${info.minWidth || 'auto'}`"
@@ -64,7 +63,7 @@
             type="primary"
             :loading="isLoading"
             @click.native="handlerSubmit"
-            v-if="isSubmit">
+            v-if="isSubmit !== false">
             {{ submitText || $t('提交') }}
           </el-button>
         </sib-throttle>
@@ -74,7 +73,7 @@
           <el-button
             class="reset"
             @click.native="handlerResetForm"
-            v-if="isCancel">
+            v-if="isCancel !== false">
             {{ cancelText || $t('重置') }}
           </el-button>
         </sib-throttle>
@@ -165,7 +164,7 @@ export default {
             currentRules: {},
             currentForm: {},
             isLoading: false,
-            isCalculating: false,
+            isCalculated: false,
         };
     },
     watch: {
@@ -327,36 +326,36 @@ export default {
         // 动态调整表单宽度
         resetFormItemWidth() {
             if (this.labelPosition === 'top') {
-                this.isCalculating = false;
+                this.isCalculated = true;
                 return;
             }
-            const formItems = this.$refs.formItems || [];
-            formItems.forEach((formItem) => {
-                try {
-                    let labelWidth = 0;
-                    let labelMargin = 0;
-                    const labelWrap = formItem.$el.querySelector('.el-form-item__label-wrap');
-                    const label = formItem.$el.querySelector('.el-form-item__label');
-                    const dom = formItem.$el.querySelector('.el-form-item__content');
-                    if (this.border) {
-                        labelWidth = this.labelWidth || 120;
-                        labelMargin = 20;
-                        label.style.width = `${labelWidth}px`;
-                    } else if (!this.border && !this.labelWidth) {
-                        labelWidth = +window.getComputedStyle(labelWrap).width.replace(/px/ig, '');
-                        labelMargin = +window.getComputedStyle(labelWrap).marginLeft.replace(/px/ig, '');
-                    } else {
-                        labelWidth = +window.getComputedStyle(label).width.replace(/px/ig, '');
-                        labelMargin = +window.getComputedStyle(label).marginLeft.replace(/px/ig, '');
-                    }
-                    dom.style.width = `calc(100% - ${labelWidth + labelMargin}px)`;
-                } catch (error) {
-                    // eslint-disable-next-line no-console
-                    console.error(error);
-                }
-            });
             setTimeout(() => {
-                this.isCalculating = false;
+                const formItems = this.$refs.formItems || [];
+                formItems.forEach((formItem) => {
+                    try {
+                        let labelWidth = 0;
+                        let labelMargin = 0;
+                        const labelWrap = formItem.$el.querySelector('.el-form-item__label-wrap');
+                        const label = formItem.$el.querySelector('.el-form-item__label');
+                        const dom = formItem.$el.querySelector('.el-form-item__content');
+                        if (this.border) {
+                            labelWidth = this.labelWidth || 120;
+                            labelMargin = 20;
+                            label.style.width = `${labelWidth}px`;
+                        } else if (!this.border && !this.labelWidth) {
+                            labelWidth = +window.getComputedStyle(labelWrap).width.replace(/px/ig, '');
+                            labelMargin = +window.getComputedStyle(labelWrap).marginLeft.replace(/px/ig, '');
+                        } else {
+                            labelWidth = +window.getComputedStyle(label).width.replace(/px/ig, '');
+                            labelMargin = +window.getComputedStyle(label).marginLeft.replace(/px/ig, '');
+                        }
+                        dom.style.width = `calc(100% - ${labelWidth + labelMargin}px)`;
+                    } catch (error) {
+                        // eslint-disable-next-line no-console
+                        console.error(error);
+                    }
+                });
+                this.isCalculated = true;
             }, 100);
         },
     },
@@ -365,10 +364,7 @@ export default {
     },
     mounted() {
         this.$nextTick(() => {
-            this.isCalculating = true;
-            setTimeout(() => {
-                this.resetFormItemWidth();
-            }, 100);
+            this.resetFormItemWidth();
         });
     },
 };

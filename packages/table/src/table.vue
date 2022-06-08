@@ -84,14 +84,18 @@
         <span v-if="expend">
           <span
             class="search_text"
-            @click="expend = !expend">{{ $t('收起') }}{{ expendText || '' }}</span>
-          <i class="icon el-icon-arrow-up" />
+            @click="expend = !expend">
+            {{ $t('收起') }}{{ expendText || '' }}
+            <i class="icon el-icon-arrow-up" />
+          </span>
         </span>
         <span v-else>
           <span
             class="search_text"
-            @click="expend = !expend">{{ $t('展开') }}{{ expendText || '' }}</span>
-          <i class="icon el-icon-arrow-down" />
+            @click="expend = !expend">
+            {{ $t('展开') }}{{ expendText || '' }}
+            <i class="icon el-icon-arrow-down" />
+          </span>
         </span>
       </div>
     </div>
@@ -428,8 +432,13 @@ export default {
             type: Array,
             default: () => ([]),
         },
-        // 如果传入请求配置，则根据配置去请求后台数据
+        // 如果通过接口请求列表数据，autoSearch 可控制初始渲染表格时是否去请求数据
+        autoSearch: {
+            type: Boolean,
+            default: true,
+        },
         /**
+         * 如果传入请求配置，则根据配置去请求后台数据
          * requestConfig: {
          *    url: '',
          *    method: 'get',
@@ -548,7 +557,7 @@ export default {
                 [this.pageParamKeys.pageSize || 'pageSize']: currentPageSize,
             };
             Object.keys(searchForm).forEach((key) => {
-                if (searchForm[key]) params[key] = searchForm[key];
+                if (key in searchForm) params[key] = searchForm[key];
             });
             return params;
         },
@@ -575,6 +584,7 @@ export default {
                 });
             }
             if (valiFlag) {
+                this.$emit('before-search', { ...(this.requestConfig.params || {}), ...this.searchParams });
                 if (this.requestConfig.url) {
                     this.pageIndex = 1;
                     this.getTableData();
@@ -605,6 +615,7 @@ export default {
         },
         // 获取表格数据
         getTableData(saveSelection) {
+            this.$emit('search', { ...(this.requestConfig.params || {}), ...this.searchParams });
             const {
                 url, method, params, callback, totalCallback, stringify,
             } = this.requestConfig;
@@ -626,6 +637,12 @@ export default {
                 let totalData = data.records || [];
                 if (callback && typeof callback === 'function') {
                     totalData = callback(res) || data.records || [];
+                }
+                // 删除行重新获取表格数据时，如果页码>1且请求不到数据，则将页码切换为1，重新获取数据
+                if (!totalData.length && this.pageIndex > 1) {
+                    this.pageIndex = 1;
+                    this.getTableData(saveSelection);
+                    return;
                 }
                 this.totalTableData = totalData;
 
@@ -685,7 +702,7 @@ export default {
         handlerInitSelection() {
             if (this.indexStyle !== 'selection') return;
             const rows = this.currentTableData.filter((row) => this.realSelections.map((item) => item[this.rowKey]).includes(row[this.rowKey]));
-            rows.forEach((row) => this.handlerToggleRowSelection(row, true));
+            rows.forEach((row) => this.toggleRowSelection(row, true));
         },
         // 当某一行被点击时会触发该事件
         handlerRowClick(row, column, event) {
@@ -811,7 +828,7 @@ export default {
     },
     mounted() {
         this.handlerResetForm();
-        this.getTableData(true);
+        if (this.autoSearch) this.getTableData(true);
         this.$nextTick(() => {
             this.resetFormItemWidth();
         });

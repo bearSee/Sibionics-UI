@@ -3,10 +3,25 @@
 .sib-form {
   background-color: #fff;
   .el-form-item {
-      margin-right: 0;
+    margin-right: 0;
     .el-form-item__content {
+      transition: .3s;
       .el-date-editor {
         width: 100%;
+      }
+    }
+  }
+  .el-form-item {
+    &:not(.button-list) {
+      .el-form-item__content {
+        // width: 0;
+        opacity: 0;
+      }
+    }
+    &.is-calculated {
+      .el-form-item__content {
+        // width: auto;
+        opacity: 1;
       }
     }
   }

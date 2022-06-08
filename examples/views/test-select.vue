@@ -183,6 +183,13 @@ export default {
                     defaultVal: 'false',
                 },
                 {
+                    params: 'props.collapseTags',
+                    des: '多选时是否将选中值按文字的形式展示',
+                    type: 'Boolean',
+                    values: 'true/false',
+                    defaultVal: 'false',
+                },
+                {
                     params: 'props.filterable',
                     des: '是否可搜索',
                     type: 'Boolean',
@@ -360,7 +367,7 @@ export default {
                 {
                     name: 'select-change',
                     des: '下拉框 select 事件',
-                    params: 'value, formatValue',
+                    params: '{ value, formatValue, checkedNodes, checkedLeafNodes }',
                 },
             ],
             slotData: [],

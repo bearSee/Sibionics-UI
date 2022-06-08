@@ -284,7 +284,7 @@ export default {
                 {
                     name: 'select-change',
                     des: '下拉框 select 事件',
-                    params: 'value, formatValue',
+                    params: '{ value, formatValue, checkedNodes, checkedLeafNodes }',
                 },
             ],
             slotData: [],

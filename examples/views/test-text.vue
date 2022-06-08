@@ -13,7 +13,7 @@
       <div slot="describe">
         <h4>使用 valueType 格式化输入框的文本内容</h4>
         <li>valueType: letter 输入框失焦后，将自动过滤掉 非大小写字母 以外的字符</li>
-        <li>valueType: number 输入框失焦后，将使用 parseFloat 将内容进行转换。注意：得到的数字是 String 类型的</li>
+        <li>valueType: number 输入框失焦后，将使用 parseFloat 将内容进行转换。</li>
         <li>valueType: letter-number 输入框失焦后，将自动过滤掉 非大小写字母、数字以及下划线 以外的字符</li>
       </div>
       <sib-item
@@ -124,6 +124,20 @@ export default {
                     des: '输入框失焦后，会将内容进行转换',
                     type: 'String',
                     values: 'letter/number/letter-number',
+                    defaultVal: '-',
+                },
+                {
+                    params: 'props.min',
+                    des: 'props.valueType 为 number 时生效，限制数字的最小值',
+                    type: 'Number',
+                    values: '-',
+                    defaultVal: '-',
+                },
+                {
+                    params: 'props.max',
+                    des: 'props.valueType 为 number 时生效，限制数字的最大值',
+                    type: 'Number',
+                    values: '-',
                     defaultVal: '-',
                 },
                 {

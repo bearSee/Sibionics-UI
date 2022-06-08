@@ -6,6 +6,7 @@
       border
       stripe
       v-loading="isLoading"
+      :auto-search="false"
       :row-size="3"
       :search-info="searchInfo"
       :table-column="tableColumn"
@@ -58,6 +59,7 @@ export default {
                     type: 'select',
                     dataType: 'number',
                     required: true,
+                    trim: 'common',
                     options: [
                         {
                             key: 1,
@@ -84,6 +86,7 @@ export default {
                         projectEnvId: 'projectEnvId',
                         testCenterId: 'testCenterId',
                     },
+                    value: 1,
                 },
                 {
                     label: '所属试验项目',
