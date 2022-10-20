@@ -7,76 +7,120 @@
       v-loading="isLoading"
       v-bind="mainTableConfig"
       :border="border"
-      :index-style="(operatePermissions.batchDelete || operatePermissions.batchDisable || operatePermissions.batchEnable) ? 'selection' : 'index'"
+      :index-style="mainTableConfig.indexStyle || ((operatePermissions.batchDelete || operatePermissions.batchDisable || operatePermissions.batchEnable) ? 'selection' : 'index')"
       :row-size="mainTableConfig.rowSize || 3"
       :request-config="mainTableRequestConfig">
       <template #search-operate>
         <slot name="search-operate" />
       </template>
-      <template #content-body="{ selections }">
-        <el-button
-          type="primary"
-          icon="el-icon-plus"
-          v-if="mainButtonConfig.add.show() && operatePermissions.add"
-          :disabled="mainButtonConfig.add.disabled()"
-          @click.native="handlerOperate('add', 'main', 'add')">
-          {{ mainButtonConfig.add.name }}
-        </el-button>
-        <el-button
-          type="primary"
-          v-if="mainButtonConfig.export.show() && operatePermissions.export"
-          :disabled="mainButtonConfig.export.disabled()"
-          @click.native="handlerExport('main')">
-          {{ mainButtonConfig.export.name }}
-        </el-button>
+      <template #content-body="{ selections, data }">
+        <sib-throttle
+          events="click"
+          v-if="mainButtonConfig.add.show(data, selections) && operatePermissions.add"
+          :time="1000">
+          <el-button
+            type="primary"
+            icon="el-icon-plus"
+            :size="mainButtonConfig.add.size"
+            :disabled="mainButtonConfig.add.disabled(data, selections)"
+            @click.native="handlerOperate('add', 'main', 'add')">
+            {{ mainButtonConfig.add.name }}
+          </el-button>
+        </sib-throttle>
+        <sib-throttle
+          events="click"
+          v-if="mainButtonConfig.export.show(data, selections) && operatePermissions.export"
+          :time="1000">
+          <el-button
+            type="primary"
+            :size="mainButtonConfig.export.size"
+            :disabled="mainButtonConfig.export.disabled(data, selections)"
+            @click.native="handlerExport('main')">
+            {{ mainButtonConfig.export.name }}
+          </el-button>
+        </sib-throttle>
         <sib-item
           v-if="operatePermissions.import"
+          :size="mainTableConfig.size"
           :props="importProps" />
-        <el-button
-          type="primary"
-          icon="el-icon-delete"
-          v-if="mainButtonConfig.batchDelete.show() && operatePermissions.batchDelete"
-          :disabled="mainButtonConfig.batchDelete.disabled()"
-          @click.native="handlerBatchDeleteRows('main', selections)">
-          {{ mainButtonConfig.batchDelete.name }}
-        </el-button>
-        <el-button
-          type="primary"
-          v-if="mainButtonConfig.batchEnable.show() && operatePermissions.batchEnable"
-          :disabled="mainButtonConfig.batchEnable.disabled()"
-          @click.native="handlerBatchEnableRows('main', selections, 'Y')">
-          {{ mainButtonConfig.batchEnable.name }}
-        </el-button>
-        <el-button
-          type="primary"
-          v-if="mainButtonConfig.batchDisable.show() && operatePermissions.batchDisable"
-          :disabled="mainButtonConfig.batchDisable.disabled()"
-          @click.native="handlerBatchEnableRows('main', selections, 'N')">
-          {{ mainButtonConfig.batchDisable.name }}
-        </el-button>
+        <sib-throttle
+          events="click"
+          v-if="mainButtonConfig.batchDelete.show(data, selections) && operatePermissions.batchDelete"
+          :time="1000">
+          <el-button
+            type="primary"
+            icon="el-icon-delete"
+            :size="mainButtonConfig.batchDelete.size"
+            :disabled="mainButtonConfig.batchDelete.disabled(data, selections)"
+            @click.native="handlerBatchDeleteRows('main', selections)">
+            {{ mainButtonConfig.batchDelete.name }}
+          </el-button>
+        </sib-throttle>
+        <sib-throttle
+          events="click"
+          v-if="mainButtonConfig.batchEnable.show(data, selections) && operatePermissions.batchEnable"
+          :time="1000">
+          <el-button
+            type="primary"
+            :size="mainButtonConfig.batchEnable.size"
+            :disabled="mainButtonConfig.batchEnable.disabled(data, selections)"
+            @click.native="handlerBatchEnableRows('main', selections, 'Y')">
+            {{ mainButtonConfig.batchEnable.name }}
+          </el-button>
+        </sib-throttle>
+        <sib-throttle
+          events="click"
+          v-if="mainButtonConfig.batchDisable.show(data, selections) && operatePermissions.batchDisable"
+          :time="1000">
+          <el-button
+            type="primary"
+            :size="mainButtonConfig.batchDisable.size"
+            :disabled="mainButtonConfig.batchDisable.disabled(data, selections)"
+            @click.native="handlerBatchEnableRows('main', selections, 'N')">
+            {{ mainButtonConfig.batchDisable.name }}
+          </el-button>
+        </sib-throttle>
         <slot
           name="content-body"
           :selections="selections" />
       </template>
       <template
-        v-for="slot in mainTableConfig.tableColumn.filter(({ code, type }) => type === 'slot' && code !== (mainTableConfig.subViewConfig || {}).code)"
-        #[slot.code]="{ row, realIndex }">
-        <div :key="slot.code">
+        v-for="slot in mainTableConfig.tableColumn.filter(({ code, type }) => type === 'slot' && code !== 'operate')"
+        #[slot.code]="{ row, column, config, index, realIndex }">
+        <div
+          class="slot-container"
+          :key="slot.code">
+          <template v-if="config.operateConfig">
+            <el-button
+              type="text"
+              v-if="config.operateConfig.unPermission || operatePermissions.sub_view"
+              :disabled="config.operateConfig.disabled && (typeof config.operateConfig.disabled === 'function' ? config.operateConfig.disabled(row, realIndex) : true)"
+              @click.native="handlerOpenSubList(row, config)">
+              <template v-if="config.formatter && typeof config.formatter === 'function'">
+                {{ config.formatter(row, config, row[config.code]) }}
+              </template>
+              <template v-else>
+                {{ row[config.code] }}
+              </template>
+            </el-button>
+            <span v-else>
+              <template v-if="config.formatter && typeof config.formatter === 'function'">
+                {{ config.formatter(row, config, row[config.code]) }}
+              </template>
+              <template v-else>
+                {{ row[config.code] }}
+              </template>
+            </span>
+          </template>
           <slot
+            v-else
             :name="slot.code"
             :row="row"
+            :column="column"
+            :config="config"
+            :index="index"
             :realIndex="realIndex" />
         </div>
-      </template>
-      <template
-        v-if="(mainTableConfig.subViewConfig || {}).code && operatePermissions.sub_view"
-        #[mainTableConfig.subViewConfig.code]="{ row, realIndex }">
-        <el-button
-          type="text"
-          :disabled="mainTableConfig.subViewConfig.disabled && (typeof mainTableConfig.subViewConfig.disabled === 'function' ? mainTableConfig.subViewConfig.disabled(row, realIndex) : true)"
-          @click.native="handlerOpenSubList(row)">
-          {{ row[mainTableConfig.subViewConfig.code] }}
-        </el-button>
       </template>
       <template #operate="{ row, realIndex }">
         <slot
@@ -139,12 +183,23 @@
           {{ mainButtonConfig.delete.name }}
         </el-button>
         <span
-          v-if="!(operatePermissions.enable
+          v-if="!(operatePermissions.sub_add
+            || operatePermissions.sonAdd
+            || operatePermissions.enable
             || operatePermissions.disable
             || operatePermissions.edit
             || operatePermissions.copy
             || operatePermissions.delete
-            || this.$scopedSlots.operate)">-</span>
+            || ($scopedSlots || {}).operate)">-</span>
+      </template>
+      <template #expand="{ row, column, index, realIndex }">
+        <slot
+          name="expand"
+          :row="row"
+          :column="column"
+          :index="index"
+          :realIndex="realIndex"
+        />
       </template>
     </sib-table>
     <el-empty
@@ -175,36 +230,56 @@
         :index-style="(operatePermissions.sub_batchDelete || operatePermissions.sub_batchDisable || operatePermissions.sub_batchEnable) ? 'selection' : 'index'"
         :row-size="subTableConfig.rowSize || 3"
         :request-config="subTableRequestConfig">
-        <template #content-body="{ selections }">
-          <el-button
-            type="primary"
-            v-if="subButtonConfig.export.show() && operatePermissions.sub_export"
-            :disabled="subButtonConfig.export.disabled()"
-            @click.native="handlerExport('sub')">
-            {{ subButtonConfig.export.name }}
-          </el-button>
-          <el-button
-            type="primary"
-            icon="el-icon-delete"
-            v-if="subButtonConfig.batchDelete.show() && operatePermissions.sub_batchDelete"
-            :disabled="subButtonConfig.batchDelete.disabled()"
-            @click.native="handlerBatchDeleteRows('sub', selections)">
-            {{ subButtonConfig.batchDelete.name }}
-          </el-button>
-          <el-button
-            type="primary"
-            v-if="subButtonConfig.batchEnable.show() && operatePermissions.sub_batchEnable"
-            :disabled="subButtonConfig.batchEnable.disabled()"
-            @click.native="handlerBatchEnableRows('sub', selections, 'Y')">
-            {{ subButtonConfig.batchEnable.name }}
-          </el-button>
-          <el-button
-            type="primary"
-            v-if="subButtonConfig.batchDisable.show() && operatePermissions.sub_batchDisable"
-            :disabled="subButtonConfig.batchDisable.disabled()"
-            @click.native="handlerBatchEnableRows('sub', selections, 'N')">
-            {{ subButtonConfig.batchDisable.name }}
-          </el-button>
+        <template #content-body="{ data, selections }">
+          <sib-throttle
+            events="click"
+            v-if="subButtonConfig.export.show(data, selections) && operatePermissions.sub_export"
+            :time="1000">
+            <el-button
+              type="primary"
+              :size="subButtonConfig.export.size"
+              :disabled="subButtonConfig.export.disabled(data, selections)"
+              @click.native="handlerExport('sub')">
+              {{ subButtonConfig.export.name }}
+            </el-button>
+          </sib-throttle>
+          <sib-throttle
+            events="click"
+            v-if="subButtonConfig.batchDelete.show(data, selections) && operatePermissions.sub_batchDelete"
+            :time="1000">
+            <el-button
+              type="primary"
+              icon="el-icon-delete"
+              :size="subButtonConfig.batchDelete.size"
+              :disabled="subButtonConfig.batchDelete.disabled(data, selections)"
+              @click.native="handlerBatchDeleteRows('sub', selections)">
+              {{ subButtonConfig.batchDelete.name }}
+            </el-button>
+          </sib-throttle>
+          <sib-throttle
+            events="click"
+            v-if="subButtonConfig.batchEnable.show(data, selections) && operatePermissions.sub_batchEnable"
+            :time="1000">
+            <el-button
+              type="primary"
+              :size="subButtonConfig.batchEnable.size"
+              :disabled="subButtonConfig.batchEnable.disabled(data, selections)"
+              @click.native="handlerBatchEnableRows('sub', selections, 'Y')">
+              {{ subButtonConfig.batchEnable.name }}
+            </el-button>
+          </sib-throttle>
+          <sib-throttle
+            events="click"
+            v-if="subButtonConfig.batchDisable.show(data, selections) && operatePermissions.sub_batchDisable"
+            :time="1000">
+            <el-button
+              type="primary"
+              :size="subButtonConfig.batchDisable.size"
+              :disabled="subButtonConfig.batchDisable.disabled(data, selections)"
+              @click.native="handlerBatchEnableRows('sub', selections, 'N')">
+              {{ subButtonConfig.batchDisable.name }}
+            </el-button>
+          </sib-throttle>
           <slot
             name="sub-content-body"
             :selections="selections" />
@@ -269,7 +344,7 @@
               || operatePermissions.sub_edit
               || operatePermissions.sub_copy
               || operatePermissions.sub_delete
-              || this.$scopedSlots['sub-operate'])">-</span>
+              || ($scopedSlots || {})['sub-operate'])">-</span>
         </template>
       </sib-table>
     </el-dialog>
@@ -398,33 +473,52 @@ export default {
                 // 查询框表单配置
                 searchInfo: [],
                 // 列表的列配置项
-                tableColumn: [],
+                tableColumn: [
+                    // {
+                    //     label: '姓名',
+                    //     code: 'name',
+                    //     type: 'slot',
+                    //     // operateConfig 是打开副列表弹窗的配置项；配置了此字段，则在点击每一行的“姓名”时，将打开副列表弹窗；
+                    //     // 注意：该列设置为插槽类型（type='slot'）才生效
+                    //     operateConfig: {
+                    //         // 是否设置为非权限控制按钮（不考虑用户是否能操作的权限，固定展示该按钮则配置为true）
+                    //         unPermission: false,
+                    //         /**
+                    //          * 是否禁用
+                    //          * Boolean/Function(row, index)
+                    //          * row: 当前行数据
+                    //          * index: 当前行索引
+                    //          */
+                    //         disabled: (row, i) => i === 3,
+                    //         /**
+                    //          * 在主列表某一行点击打开查看副列表的弹窗后
+                    //          * 请求副列表数据时，将该行的 "id" 赋值给 "rowId"
+                    //          * params: { rowId: row.id } 将当做附加的请求参数去请求副列表的tableData
+                    //          */
+                    //         paramsKey: 'rowId',
+                    //         paramsValueKey: 'id',
+                    //         /**
+                    //          * 点击指定的数据行内字段查看副列表的自定义方法 (row, config, requestConfig)，此场景适用于副列表不支持使用接口请求数据的情况或者需要重写接口请求配置时可使用
+                    //          * 该方法可以 return 一个 requestConfig 的接口请求配置，那么副列表弹窗正常打开；如果没 return，则不会打开副列表弹窗
+                    //          * row 点击时的行数据
+                    //          * config 该列的原始配置
+                    //          * requestConfig 请求接口配置的相关配置
+                    //          */
+                    //         customOperate: null,
+                    //     },
+                    // },
+                ],
                 // 请求接口的外部配置，一般用于设定默认参数和定义回调方法
                 requestConfig: {
                     // params: {},
                     // callback: null,
                 },
-                // 列表导入配置
-                importProps: {
-                    // // 文件类型限制（默认excel表格的格式）
-                    // accept: 'application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                    // // 导入参数
-                    // params: {},
-                    // // 是否展示导入文件列表
-                    // showFileList: false,
-                    // // 是否展示导入提示文案
-                    // showTips: false,
-                    // // 导入按钮名称，默认为 "列表导入"
-                    // btnText: '',
-                    // // 上传前的回调方法，不 return 或者 return false 则中止上传
-                    // beforeUpload: null,
-                    // // 导入成功回调，组件内部提供refreshTable方法来刷新主列表和副列表的数据（this.$refs.pageComponent.refreshTable()）
-                    // onSuccess: null,
-                },
                 // 按钮配置
                 buttonConfig: {
                     // add: {
                     //     name: '新增行',
+                    //     // Function/Boolean
+                    //     // disabled(data, selections) data: 当前表格数据 selections: 当前选中的行数据
                     //     disabled: false,
                     // },
                     // sonAdd: {
@@ -442,9 +536,25 @@ export default {
                     // import: {
                     //     name: '列表导入',
                     //     disabled: false,
+                    //     // 文件类型限制（默认excel表格的格式）
+                    //     accept: 'application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                    //     // 导入参数
+                    //     params: {},
+                    //     // 是否展示导入文件列表
+                    //     showFileList: false,
+                    //     // 是否展示导入提示文案
+                    //     showTips: false,
+                    //     // 导入按钮名称，默认为 "列表导入"
+                    //     btnText: '',
+                    //     // 上传前的回调方法，不 return 或者 return false 则中止上传
+                    //     beforeUpload: null,
+                    //     // 导入成功回调，组件内部提供refreshTable方法来刷新主列表和副列表的数据（this.$refs.pageComponent.refreshTable()）
+                    //     onSuccess: null,
                     // },
                     // export: {
                     //     name: '列表导出',
+                    //     // Function/Boolean
+                    //     // disabled(data, selections) data: 当前表格数据 selections: 当前选中的行数据
                     //     disabled: false,
                     // },
                     // delete: {
@@ -453,14 +563,20 @@ export default {
                     // },
                     // batchDelete: {
                     //     name: '批量删除',
+                    //     // Function/Boolean
+                    //     // disabled(data, selections) data: 当前表格数据 selections: 当前选中的行数据
                     //     disabled: false,
                     // },
                     // batchEnable: {
                     //     name: '批量启用',
+                    //     // Function/Boolean
+                    //     // disabled(data, selections) data: 当前表格数据 selections: 当前选中的行数据
                     //     disabled: false,
                     // },
                     // batchDisable: {
                     //     name: '批量禁用',
+                    //     // Function/Boolean
+                    //     // disabled(data, selections) data: 当前表格数据 selections: 当前选中的行数据
                     //     disabled: false,
                     // },
                     // enable: {
@@ -481,32 +597,6 @@ export default {
                     // 数据行被禁用时的值(row.status === '2'代表被禁用)
                     off: '2',
                 },
-                // 点击指定的数据行内字段查看副列表的相关配置
-                subViewConfig: {
-                    // 将主列表中字段为specsCount的单元格设置为按钮，点击打开副列表弹窗，查看副列表数据
-                    code: 'specsCount',
-                    /**
-                     * 是否禁用
-                     * Boolean/Function(row, index)
-                     * row: 当前行数据
-                     * index: 当前行索引
-                     */
-                    disabled: null,
-                    /**
-                     * 在主列表某一行点击打开查看副列表的弹窗后
-                     * 请求副列表数据时，将该行的 "id"（paramsValueKey）赋值给 "medicineId"（paramsKey）
-                     * params: { medicineId: row.id } 将当做请求参数去请求副列表的tableData
-                     */
-                    paramsKey: 'medicineId',
-                    paramsValueKey: 'id',
-                },
-                /**
-                 * 点击指定的数据行内字段查看副列表的自定义方法 (row, requestConfig, callback)
-                 * row 点击时的行数据
-                 * requestConfig 请求接口配置的相关配置
-                 * callback 打开副列表弹窗的回调方法
-                 */
-                handlerOpenSubList: null,
                 /**
                  * 删除行自定义方法 (row, requestConfig, callback)
                  * row 需要删除的行数据对象
@@ -597,6 +687,17 @@ export default {
                  */
                 getSpecialConfig: null,
                 /**
+                 * 表单自动提交前的预处理方法；
+                 * ①支持return新的form对象进行提交
+                 * ②支持return false 中止提交
+                 * ③return 的值不为以上两种情况，或不return，则使用原form对象提交
+                 * beforeSubmit(obj)
+                 * obj.form: 当前表单数据
+                 * obj.type: 当前操作类型
+                 * obj.currentRow: 当前行数据对象
+                 */
+                beforeSubmit: null,
+                /**
                  * 自定义提交表单方法
                  * handlerSubmit(obj, callback)
                  * obj.form: 当前表单数据
@@ -607,13 +708,12 @@ export default {
                  */
                 handlerSubmit: null,
                 /**
-                 * 表单自动提交前的预处理方法，需return新的form对象
-                 * handlerSubmit(obj)
+                 * 表单提交的方法
+                 * submitSuccess(form, type)
                  * obj.form: 当前表单数据
                  * obj.type: 当前操作类型
-                 * obj.currentRow: 当前行数据对象
                  */
-                beforeSubmit: null,
+                submitSuccess: null,
             }),
         },
         // 副列表查询配置
@@ -744,6 +844,17 @@ export default {
                  */
                 getSpecialConfig: null,
                 /**
+                 * 表单自动提交前的预处理方法；
+                 * ①支持return新的form对象进行提交
+                 * ②支持return false 中止提交
+                 * ③return 的值不为以上两种情况，或不return，则使用原form对象提交
+                 * beforeSubmit(obj)
+                 * obj.form: 当前表单数据
+                 * obj.type: 当前操作类型
+                 * obj.currentRow: 当前行数据对象
+                 */
+                beforeSubmit: null,
+                /**
                  * 自定义提交表单方法
                  * handlerSubmit(obj, callback)
                  * obj.form: 当前表单数据
@@ -754,13 +865,12 @@ export default {
                  */
                 handlerSubmit: null,
                 /**
-                 * 表单自动提交前的预处理方法，需return新的form对象
-                 * handlerSubmit(obj)
+                 * 表单提交的方法
+                 * submitSuccess(form, type)
                  * obj.form: 当前表单数据
                  * obj.type: 当前操作类型
-                 * obj.currentRow: 当前行数据对象
                  */
-                beforeSubmit: null,
+                submitSuccess: null,
             }),
         },
         border: {
@@ -797,15 +907,16 @@ export default {
                 showFileList: false,
                 showTips: false,
                 btnText: ((this.mainTableConfig.buttonConfig || {}).import || {}).name || '列表导入',
-                disabled: ((this.mainTableConfig.buttonConfig || {}).import || {}).disabled,
+                // disabled: ((this.mainTableConfig.buttonConfig || {}).import || {}).disabled,
                 beforeUpload: (file) => {
-                    const bool = file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+                    const types = ['application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
+                    const bool = types.includes(file.type);
                     if (!bool) this.$message.warning('只支持导入excel表格文件');
                     return bool;
                 },
                 onSuccess: (res, file) => {
                     if (String(res.code) === '200') {
-                        this.$message.success('导入成功');
+                        this.$message.success(res.message || '导入成功');
                         this.refreshTable();
                         return { name: file.name, data: res };
                     }
@@ -822,7 +933,8 @@ export default {
                     this.$message.error(res.message || '导入失败');
                     return null;
                 },
-                ...(this.mainTableConfig.importProps || {}),
+                ...((this.mainTableConfig.buttonConfig || {}).import || {}),
+                name: ((this.mainTableConfig.buttonConfig || {}).import || {}).filename || 'file',
             },
         };
     },
@@ -897,7 +1009,8 @@ export default {
     },
     methods: {
         getButtonConfig(type) {
-            const { buttonConfig = {} } = ({ main: this.mainTableConfig, sub: this.subTableConfig })[type];
+            const tableConfig = ({ main: this.mainTableConfig, sub: this.subTableConfig })[type];
+            const { buttonConfig = {} } = tableConfig;
             const defaultButtonNames = {
                 add: '新增行',
                 sonAdd: '新增子级',
@@ -913,6 +1026,7 @@ export default {
             };
             const config = (tp) => ({
                 name: (buttonConfig[tp] || {}).name || defaultButtonNames[tp],
+                size: (buttonConfig[tp] || {}).size || tableConfig.size || 'small',
                 disabled: (row, index) => (buttonConfig[tp] || {}).disabled && (typeof (buttonConfig[tp] || {}).disabled === 'function' ? (buttonConfig[tp] || {}).disabled(row, index) : true),
                 // eslint-disable-next-line no-nested-ternary
                 show: (row, index) => (('show' in (buttonConfig[tp] || {}))
@@ -934,24 +1048,31 @@ export default {
             };
         },
         // 打开副列表弹窗展示
-        handlerOpenSubList(row) {
+        handlerOpenSubList(row, config) {
             this.currentRow = row;
             const detailRequestConfig = this.getRequestConfig('sub_view');
-            const { subViewConfig = {}, handlerOpenSubList } = this.mainTableConfig;
-            if (handlerOpenSubList && typeof handlerOpenSubList === 'function') {
-                handlerOpenSubList(row, detailRequestConfig, () => {
-                    this.subListVisible = true;
-                });
-                return;
-            }
-            this.subTableRequestConfig = {
+            const {
+                paramsKey = 'id',
+                paramsValueKey = 'id',
+                customOperate,
+            } = config.operateConfig || {};
+            const subTableRequestConfig = {
                 ...detailRequestConfig,
                 params: {
                     ...detailRequestConfig.params,
-                    [subViewConfig.paramsKey || 'id']: row[subViewConfig.paramsValueKey || 'id'],
+                    [paramsKey]: row[paramsValueKey],
                 },
                 ...(this.subTableConfig.requestConfig || {}),
             };
+            if (customOperate && typeof customOperate === 'function') {
+                const customConfig = customOperate(row, config, subTableRequestConfig);
+                if (customConfig) {
+                    this.subTableRequestConfig = customConfig;
+                    this.subListVisible = true;
+                }
+                return;
+            }
+            this.subTableRequestConfig = subTableRequestConfig;
             this.subListVisible = true;
         },
         // 单行删除
@@ -1153,7 +1274,7 @@ export default {
         // 新增、编辑、复制提交
         handlerSubmit(form, cb) {
             const { type, source, permission } = this.dialogConfig;
-            const { beforeSubmit, handlerSubmit } = ({ sub: this.subDialogConfig, main: this.mainDialogConfig })[source];
+            const { beforeSubmit, handlerSubmit, submitSuccess } = ({ sub: this.subDialogConfig, main: this.mainDialogConfig })[source];
 
             // 外部传入的方法优先执行，参数：第一个参数为包含表单数据、操作类型、请求接口配置以及当前行数据的对象，第二个为刷新列表、关闭弹窗的回调函数
             if (handlerSubmit && typeof handlerSubmit === 'function') {
@@ -1172,13 +1293,19 @@ export default {
             }
             // 外部传入的对form进行预处理的方法,参数为包含表单数据、操作类型以及当前行数据的对象
             if (beforeSubmit && typeof beforeSubmit === 'function') {
-                form = beforeSubmit({ form, type, currentRow: this.currentRow }) || form;
+                const data = beforeSubmit({ form, type, currentRow: this.currentRow });
+                if (data === false) {
+                    cb();
+                    return;
+                }
+                if (Object.prototype.toString.call(data) === '[object Object]') form = data;
             }
 
             this.handlerRequest(permission, form).then(() => {
                 this.$message.success('保存成功');
                 this.dialogConfig.visible = false;
                 this.refreshTable();
+                if (submitSuccess && typeof submitSuccess === 'function') submitSuccess(form);
             }).catch((err) => {
                 const code = err && err.data && err.data.code;
                 if (['998', '901'].includes(String(code))) this.handlerSubmit(form, cb);
@@ -1209,17 +1336,21 @@ export default {
                 resetFormItemWidth: (this.$refs.dialogForm || {}).resetFormItemWidth,
             });
         },
-        // 动态获取接口的相关配置 外部可通过refs调用，isWholeAddress:是否为完整路径
+        // 动态获取接口的相关配置 外部可通过refs调用
         getRequestConfig(permission) {
             const {
                 url = '', method, params, headers, callback, requestConfig,
             } = this.operatePermissions[permission] || this.operatePermissions[`${this.permissionPrefix}_${permission}`] || {};
             let config = {};
             if (requestConfig) {
-                try {
-                    config = JSON.parseAll(requestConfig);
-                } catch (error) {
-                    console.error('请求配置解析有误：', error);
+                if (typeof requestConfig === 'string') {
+                    try {
+                        config = JSON.parseAll(requestConfig);
+                    } catch (error) {
+                        console.error('请求配置解析有误：', error);
+                    }
+                } else if (Object.prototype.toString.call(requestConfig) === '[object Object]') {
+                    config = requestConfig;
                 }
             }
             return {

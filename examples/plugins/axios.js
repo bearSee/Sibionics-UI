@@ -3,9 +3,10 @@ import axios from 'axios';
 import { encryptAES } from '@/utils/encryption';
 
 const { formatDate } = window.SIB;
+const { origin, pathname } = window.location;
 
 const axiosConfig = {
-    baseURL: '',
+    baseURL: `${origin}${pathname}`,
     timeout: 30 * 1000, // Timeout
 };
 const Axios = axios.create(axiosConfig);
@@ -29,9 +30,11 @@ Axios.interceptors.request.use(
                 ...config.params,
             };
         }
+        window.NProgress.start();
         return config;
     },
     (error) => {
+        window.NProgress.done();
         Promise.reject(error);
     },
 );
@@ -39,6 +42,7 @@ Axios.interceptors.request.use(
 // 响应拦截
 Axios.interceptors.response.use(
     async (res) => {
+        window.NProgress.done();
         const { code, message } = res.data || {};
 
         // 返回成功响应
@@ -51,6 +55,7 @@ Axios.interceptors.response.use(
         return Promise.reject(res);
     },
     (error) => {
+        window.NProgress.done();
         Vue.prototype.$message.error('服务器内部异常');
         return Promise.reject(error);
     },

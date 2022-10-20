@@ -87,8 +87,35 @@ console.log(number.toFixed(2))  // 0.24
 `,
                 },
                 {
+                    title: '以下对象会自动挂载在 window 对象上',
+                    subTitle: 'NProgress',
+                    des: [
+                        '该对象提供了 start 和 done 表示开始和结束加载进度的两个方法，其作用是模拟展示浏览器数据加载的进度条，一般可配置在 axios 接口拦截处',
+                    ],
+                    code: // eslint-disable-next-line vue/script-indent
+`// axios.js
+
+import Vue from 'vue';
+import axios from 'axios';
+
+const Axios = axios.create();
+
+// 在 request 拦截器中，展示进度条
+axios.interceptors.request.use(config => {
+  window.NProgress.start()
+  return config
+});
+
+// 在 response 拦截器中，隐藏进度条
+axios.interceptors.response.use(config => {
+  window.NProgress.done()
+  return config
+});
+`,
+                },
+                {
                     title: '以下方法会自动挂载在 window.SIB 对象上',
-                    subTitle: 'window.SIB.deepCopy',
+                    subTitle: 'deepCopy',
                     des: [
                         '该方法的作用是对对象进行深拷贝',
                     ],
@@ -108,7 +135,7 @@ console.log(obj2)  // { a: 1, b: 2 }
 `,
                 },
                 {
-                    subTitle: 'window.SIB.download',
+                    subTitle: 'download',
                     des: [
                         '该方法的作用是下载附件',
                         '它接收两个参数，第一个为 附件url地址 或者 Blob 对象，第二个为文件名(需要带后缀，非必传)',
@@ -124,7 +151,7 @@ window.SIB.download({ data: blob }, 'demo.html');
 `,
                 },
                 {
-                    subTitle: 'window.SIB.getuuid',
+                    subTitle: 'getuuid',
                     des: [
                         '该方法的作用是获取随机uuid',
                     ],
@@ -133,7 +160,7 @@ window.SIB.download({ data: blob }, 'demo.html');
 `,
                 },
                 {
-                    subTitle: 'window.SIB.getCertainDate',
+                    subTitle: 'getCertainDate',
                     des: [
                         '用于获取距离今日 n 天的日期',
                         '它接收两个参数，第一个为距离今天的天数(Number)，可以为负数，第二个为返回的日期格式',
@@ -156,7 +183,7 @@ const date4 = window.SIB.getCertainDate(-3);
 console.log(date4)  // '2021-10-18'`,
                 },
                 {
-                    subTitle: 'window.SIB.repairAccuracy',
+                    subTitle: 'repairAccuracy',
                     des: [
                         '该方法的作用是将数值在运算后丢失精度的结果转为正常值',
                         '它接收两个参数，第一个为需要处理的数值(Number或者String，最后都会转成Number类型)，第二个是输出的结果需要保留的小数位数',
@@ -172,42 +199,42 @@ console.log(num3)  // 0.34
 `,
                 },
                 {
-                    subTitle: 'window.SIB.isMobilePhone',
+                    subTitle: 'isMobilePhone',
                     des: [],
                     code: // eslint-disable-next-line vue/script-indent
 `console.log(window.SIB.isMobilePhone('18888888888'))  // true
 `,
                 },
                 {
-                    subTitle: 'window.SIB.isTelephone',
+                    subTitle: 'isTelephone',
                     des: [],
                     code: // eslint-disable-next-line vue/script-indent
 `console.log(window.SIB.isTelephone('0755-88888888'))  // true
 `,
                 },
                 {
-                    subTitle: 'window.SIB.isEmail',
+                    subTitle: 'isEmail',
                     des: [],
                     code: // eslint-disable-next-line vue/script-indent
 `console.log(window.SIB.isEmail('123456@163.com'))  // true
 `,
                 },
                 {
-                    subTitle: 'window.SIB.isURL',
+                    subTitle: 'isURL',
                     des: [],
                     code: // eslint-disable-next-line vue/script-indent
 `console.log(window.SIB.isURL('http://www.bearsee.com.cn/sibionics-ui'))  // true
 `,
                 },
                 {
-                    subTitle: 'window.SIB.isIdentityCode',
+                    subTitle: 'isIdentityCode',
                     des: [],
                     code: // eslint-disable-next-line vue/script-indent
 `console.log(window.SIB.isIdentityCode('430321199503106666'))  // false (${this.$t('校验位错误')})
 `,
                 },
                 {
-                    subTitle: 'window.SIB.verificationRules',
+                    subTitle: 'verificationRules',
                     des: [],
                     code: // eslint-disable-next-line vue/script-indent
 `const { checkUsername, checkPassword, checkCode } = window.SIB.verificationRules;

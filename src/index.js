@@ -2,12 +2,12 @@ import qs from 'qs';
 
 // 注册Element
 import Element from 'element-ui';
-
-// 注册 I18n
-import registerI18n from './locale';
+// 进度条控件
+import NProgress from 'nprogress';
 
 // 引入 element-ui 及当前ui库样式
 import 'element-ui/lib/theme-chalk/index.css';
+import 'nprogress/nprogress.css';
 import '../packages/theme-chalk/src/index.scss';
 
 // 引入挂载到基础数据类型原型上的方法
@@ -65,11 +65,10 @@ function install(Vue, opts = {}) {
       size: opts.size || 'small',
   });
 
-  registerI18n(Vue, opts);
-
   Object.assign(Vue.prototype, {
     $download: Download,
     $qs: qs,
+    $t: Vue.prototype.$t || ((key) => key),
     $globalVariable: {
       initMathjaxConfig,
       MathQueue,
@@ -83,24 +82,7 @@ if (typeof window !== 'undefined' && window.Vue) {
 
 if (window && document) {
   document.documentElement.style.fontSize = '100px';
-  // const resize = () => {
-  //   const ww = window.innerWidth;
-  //   const dpr = window.devicePixelRatio;
-  //   let scale = 1;
-  //   if (ww * dpr >= 1680) {
-  //     scale = Math.max(Math.min(dpr, 1.25), 1);
-  //   }
-  //   document.documentElement.style.fontSize = `${scale * 100 / dpr}px`;
-  // };
-
-  // resize();
-
-  // window.addEventListener('resize', resize);
-  // window.addEventListener('pageshow', (e) => {
-  //   if (e.presisted) {
-  //     resize();
-  //   }
-  // });
+  window.NProgress = NProgress;
 }
 
 const version = require('../package.json').version;

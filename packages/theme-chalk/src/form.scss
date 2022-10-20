@@ -138,6 +138,12 @@
                       margin-right: 10px;
                     }
                 }
+                .text-label {
+                    overflow: auto;
+                    white-space: inherit;
+                    text-overflow: inherit;
+                    margin: auto;
+                }
             }
         }
       .el-form-item.button-list {

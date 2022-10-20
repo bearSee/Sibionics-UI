@@ -184,6 +184,13 @@ export default {
                     defaultVal: '[]',
                 },
                 {
+                    params: 'props.optionKey',
+                    des: '定义下拉选项的唯一key，用来优化渲染；默认从 props.optionProps.key 取值（若下拉选项唯一key重复，可能需要用到该字段）',
+                    type: 'String/Number',
+                    values: '-',
+                    defaultVal: '-',
+                },
+                {
                     params: 'props.options[i].key',
                     des: '下拉选项选中时保存的键',
                     type: '-',

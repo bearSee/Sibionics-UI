@@ -13,10 +13,11 @@
         :props="props1"
       />
     </example>
-    <example :ignore-keys="['input']">
+    <example
+      :slot-data-string="slotDataString2"
+      :ignore-keys="['input']">
       <div slot="describe">
-        <h4>2、多选下拉框</h4>
-        <li>配置 multiple: true </li>
+        <h4>2、自定义下拉框样式</h4>
       </div>
       <p>{{ $t('当前已选择') }}：{{ value2 || '--' }}</p>
       <sib-item
@@ -26,14 +27,27 @@
     </example>
     <example :ignore-keys="['input']">
       <div slot="describe">
-        <h4>3、从接口请求数据</h4>
-        <li>配置 requestConfig: { url: ' ', method: ' ', params: { }, callback: () => {} } </li>
-        <li>optionProps: { key: ' ', value: ' ' } 获取完后台数据后，通过配置optionProps用于指定选中的数据中value字段用于展示，key字段用来保存</li>
+        <h4>3、多选下拉框</h4>
+        <li>配置 multiple: true </li>
       </div>
       <p>{{ $t('当前已选择') }}：{{ value3 || '--' }}</p>
       <sib-item
         v-model="value3"
         :props="props3"
+      />
+    </example>
+    <example
+      :slot-data-string="slotDataString4"
+      :ignore-keys="['input']">
+      <div slot="describe">
+        <h4>4、从接口请求数据</h4>
+        <li>配置 requestConfig: { url: ' ', method: ' ', params: { }, callback: () => {} } </li>
+        <li>optionProps: { key: ' ', value: ' ' } 获取完后台数据后，通过配置optionProps用于指定选中的数据中value字段用于展示，key字段用来保存</li>
+      </div>
+      <p>{{ $t('当前已选择') }}：{{ value4 || '--' }}</p>
+      <sib-item
+        v-model="value4"
+        :props="props4"
       />
     </example>
     <config-table
@@ -85,8 +99,25 @@ export default {
                     },
                 ],
             },
-            value2: ['5', '6'],
+            value2: '2',
             props2: {
+                type: 'select',
+                optionProps: {
+                    customHTML: (item) => `<span style=color:pink;font-weight:400;>${item.value}</span> ${item.key}`,
+                },
+                options: [
+                    {
+                        key: '1',
+                        value: '闲来垂钓碧溪上',
+                    },
+                    {
+                        key: '2',
+                        value: '忽复乘舟梦日边',
+                    },
+                ],
+            },
+            value3: ['5', '6'],
+            props3: {
                 type: 'select',
                 multiple: true,
                 options: [
@@ -116,8 +147,8 @@ export default {
                     },
                 ],
             },
-            value3: ['2'],
-            props3: {
+            value4: ['2'],
+            props4: {
                 type: 'select',
                 multiple: true,
                 optionProps: {
@@ -132,6 +163,43 @@ export default {
                     callback: (res) => res.data.data.records,
                 },
             },
+            slotDataString2: `{
+                value: '2',
+                props: {
+                    type: 'select',
+                    optionProps: {
+                        customHTML: (item) => \`<span style=color:red;font-weight:600;>\${item.name}</span> \${item.id}\`,
+                    },
+                    options: [
+                        {
+                            key: '1',
+                            value: '闲来垂钓碧溪上',
+                        },
+                        {
+                            key: '2',
+                            value: '忽复乘舟梦日边',
+                        },
+                    ],
+                },
+            }`,
+            slotDataString4: `{
+                value: ['2'],
+                props: {
+                    type: 'select',
+                    multiple: true,
+                    optionProps: {
+                        key: 'id',
+                        value: 'name',
+                    },
+                    requestConfig: {
+                        url: '/table-data.json',
+                        method: 'get',
+                        params: {},
+                        // 请求完数据的回调，可以用来修改数据结构
+                        callback: (res) => res.data.data.records,
+                    },
+                },
+            }`,
             attributeData: [
                 {
                     params: 'value/v-model',
@@ -267,6 +335,13 @@ export default {
                     defaultVal: '[]',
                 },
                 {
+                    params: 'props.optionKey',
+                    des: '定义下拉选项的唯一key，用来优化下拉框的渲染；默认从 props.optionProps.key 取值（若下拉选项唯一key重复，可能需要用到该字段）',
+                    type: 'String/Number',
+                    values: '-',
+                    defaultVal: '-',
+                },
+                {
                     params: 'props.options[i].key',
                     des: '下拉选项选中时保存的键',
                     type: '-',
@@ -277,6 +352,13 @@ export default {
                     params: 'props.options[i].value',
                     des: '下拉选项展示的值',
                     type: '-',
+                    values: '-',
+                    defaultVal: '-',
+                },
+                {
+                    params: 'props.options[i].customHTML',
+                    des: '自定义下拉选项的html的方法，需返回html字符串；参数为对应下拉选项的配置',
+                    type: 'Function(opt)',
                     values: '-',
                     defaultVal: '-',
                 },

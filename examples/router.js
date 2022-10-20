@@ -88,6 +88,7 @@ const router = new Router({
         {
           path: '/index-page',
           name: 'IndexPage 菜单主页',
+          redirect: '/index-page/calculator',
           component: () => import('./views/test-index-page'),
           children: [
             {

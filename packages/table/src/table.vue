@@ -21,7 +21,7 @@
             ref="formItems"
             :style="`width:${info.itemWidth || (100 / rowSize).toFixed(2)}%;`"
             v-if="info.show !== false"
-            v-show="expend || expendAll ? index < searchInfo.length : index < (defaultSize > rowSize - 1 ? rowSize - 1 : (defaultSize > 0 ? defaultSize : rowSize - 1))"
+            v-show="expand || expandAll ? index < searchInfo.length : index < (defaultSize > rowSize - 1 ? rowSize - 1 : (defaultSize > 0 ? defaultSize : rowSize - 1))"
             :class="info.code + '-search-temp search-form__temp'"
             :label="$t(info.label)"
             :prop="info.code">
@@ -80,20 +80,20 @@
       </el-form>
       <div
         class="show-more"
-        v-if="!expendAll && searchInfo.length >= rowSize">
-        <span v-if="expend">
+        v-if="!expandAll && searchInfo.length >= rowSize">
+        <span v-if="expand">
           <span
             class="search_text"
-            @click="expend = !expend">
-            {{ $t('收起') }}{{ expendText || '' }}
+            @click="expand = !expand">
+            {{ $t('收起') }}{{ expandText || '' }}
             <i class="icon el-icon-arrow-up" />
           </span>
         </span>
         <span v-else>
           <span
             class="search_text"
-            @click="expend = !expend">
-            {{ $t('展开') }}{{ expendText || '' }}
+            @click="expand = !expand">
+            {{ $t('展开') }}{{ expandText || '' }}
             <i class="icon el-icon-arrow-down" />
           </span>
         </span>
@@ -135,6 +135,7 @@
         :lazy="lazy"
         :load="load"
         :tree-props="treeProps"
+        :default-expand-all="defaultExpandAll"
         :row-key="rowKey"
         @row-click="handlerRowClick"
         @row-dblclick="handlerRowdblclick"
@@ -224,9 +225,17 @@
           <el-button
             type="text"
             @click.native="clearSelection">
+            <i class="el-icon-refresh-right" />
             {{ $t('清空') }}
           </el-button>
         </template>
+        <el-button
+          type="text"
+          v-if="isRefresh !== false && requestConfig.url"
+          @click.native="getTableData(false)">
+          <i class="el-icon-refresh" />
+          {{ $t('刷新列表') }}
+        </el-button>
       </div>
       <el-pagination
         v-if="isPagination && !hidePagination"
@@ -300,12 +309,12 @@ export default {
             default: 0,
         },
         // 收起/展开按钮文案
-        expendText: {
+        expandText: {
             type: String,
             default: '',
         },
         // 是否展示全部表单
-        expendAll: {
+        expandAll: {
             type: Boolean,
             default: false,
         },
@@ -321,6 +330,11 @@ export default {
         indexStyle: {
             type: String,
             default: 'index',
+        },
+        // 是否默认展开所有子节点
+        defaultExpandAll: {
+            type: Boolean,
+            default: false,
         },
         // 序号、勾选框列的宽度
         indexWidth: {
@@ -464,6 +478,11 @@ export default {
         /**
          * -----分页组件相关配置参数-----
          */
+        // 是否需要刷新列表按钮
+        isRefresh: {
+            type: Boolean,
+            default: false,
+        },
         // 是否需要分页
         isPagination: {
             type: Boolean,
@@ -509,7 +528,7 @@ export default {
         return {
             hidePagination: false,
             searchForm: {},
-            expend: false,
+            expand: false,
             pageIndex: 1,
             currentPageSize: this.pageSize,
             currentTotalSize: 0,
@@ -525,7 +544,7 @@ export default {
         };
     },
     watch: {
-        expend() {
+        expand() {
             this.$nextTick(() => {
                 this.resetTableHeight();
                 this.resetFormItemWidth();
@@ -564,7 +583,7 @@ export default {
         buttonListStyle() {
             const percentNumber = this.searchInfo.length % this.rowSize;
             const percent = (100 / this.rowSize * (this.rowSize - percentNumber)).toFixed(2);
-            if ((this.searchInfo.length < this.rowSize - 1) || this.expendAll || this.expend) {
+            if ((this.searchInfo.length < this.rowSize - 1) || this.expandAll || this.expand) {
                 return `width:${percent}%;text-align: ${!percentNumber ? 'right' : 'left'};`;
             }
             // eslint-disable-next-line no-nested-ternary
@@ -640,7 +659,7 @@ export default {
                 }
                 // 删除行重新获取表格数据时，如果页码>1且请求不到数据，则将页码切换为1，重新获取数据
                 if (!totalData.length && this.pageIndex > 1) {
-                    this.pageIndex = 1;
+                    this.pageIndex -= 1;
                     this.getTableData(saveSelection);
                     return;
                 }
@@ -652,10 +671,16 @@ export default {
                 }
                 this.currentTotalSize = total;
 
-                const start = this.currentPageSize * (this.pageIndex - 1);
-                const end = start + this.currentPageSize;
                 if (this.totalTableData.length > this.currentPageSize && this.isPagination) {
-                    this.currentTableData = this.totalTableData.slice(start, end);
+                    const start = this.currentPageSize * (this.pageIndex - 1);
+                    const end = start + this.currentPageSize;
+                    const tData = this.totalTableData.slice(start, end);
+                    if (!tData.length) {
+                        this.pageIndex -= 1;
+                        this.currentTableData = this.totalTableData.slice(start - this.currentPageSize, end);
+                    } else {
+                        this.currentTableData = tData;
+                    }
                 } else {
                     this.currentTableData = this.totalTableData;
                 }
@@ -684,6 +709,9 @@ export default {
         // 当用户对某一行展开或者关闭的时候会触发该事件（展开行时，回调的第二个参数为 expandedRows；树形表格时第二参数为 expanded）
         handlerExpand(row, expandedRows) {
             this.$emit('expand-change', row, expandedRows);
+            this.$nextTick(() => {
+                this.resetTableHeight();
+            });
         },
         setCommonTableData(savePage) {
             if (this.isPagination) {

@@ -59,7 +59,6 @@
       <sib-table
         row-key="id"
         index-style="expand"
-        :search-info="searchInfo"
         :table-column="tableColumn1"
         :table-data="tableData">
         <template #expand="{ row }">
@@ -103,6 +102,7 @@
         </li>
       </div>
       <sib-table
+        index-style="selection"
         row-key="id"
         :search-info="searchInfo"
         :table-column="tableColumn1"
@@ -116,7 +116,7 @@
       </div>
       <sib-table
         index-style="selection"
-        :expend-text="$t('高级搜索')"
+        :expand-text="$t('高级搜索')"
         :search-info="searchInfo"
         :table-column="tableColumn1"
         :table-data="tableData">
@@ -379,14 +379,14 @@ export default {
                     defaultVal: '0',
                 },
                 {
-                    params: 'expendAll',
+                    params: 'expandAll',
                     des: '是否展示全部搜索条件',
                     type: 'Boolean',
                     values: 'true/false',
                     defaultVal: 'false',
                 },
                 {
-                    params: 'expendText',
+                    params: 'expandText',
                     des: '收起/展开搜索条件文案',
                     type: 'String',
                     values: '-',
@@ -405,6 +405,13 @@ export default {
                     type: 'String',
                     values: 'selection/index/expand/none',
                     defaultVal: "'index'",
+                },
+                {
+                    params: 'defaultExpandAll',
+                    des: '是否默认展开所有子节点',
+                    type: 'Boolean',
+                    values: 'true/false',
+                    defaultVal: 'false',
                 },
                 {
                     params: 'indexWidth',
@@ -566,6 +573,13 @@ export default {
                     type: '[String, Array]',
                     values: '-',
                     defaultVal: '',
+                },
+                {
+                    params: 'isRefresh',
+                    des: '是否需要手动刷新列表按钮（配置 requestConfig 时生效）',
+                    type: 'Boolean',
+                    values: 'true/false',
+                    defaultVal: 'false',
                 },
                 {
                     params: 'isPagination',
@@ -875,9 +889,14 @@ export default {
                     params: '当前已勾选的行数据 { data, selections }',
                 },
                 {
+                    name: 'column.headerSlotcode',
+                    des: '表格中某一列的列头插槽，插槽名称为该列code',
+                    params: '当前列数据、当前列头配置、当前列的索引 { column, config, index }',
+                },
+                {
                     name: 'column.code',
-                    des: '表格列的插槽，name动态为该列code',
-                    params: '当前行数据、当前列数据、当前行的索引 { row, column, index }',
+                    des: '表格中某一列对应的单元格插槽，插槽名称为该列code',
+                    params: '当前行数据、当前列数据、当前列头配置、当前行的索引、当前行真实索引 { row, column, config, index, realIndex }',
                 },
             ],
             refData: [

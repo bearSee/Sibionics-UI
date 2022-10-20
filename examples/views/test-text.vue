@@ -48,6 +48,7 @@ export default {
                 prefix: 'el-icon-microphone',
                 trim: 'none',
                 unit: '天/次',
+                // unit: '<span class="unit-btn">按钮</span>',
             },
             value: '世上本没有路，走的人多了，便成了路。',
             props1: {
@@ -213,6 +214,12 @@ export default {
             ],
             slotData: [],
         };
+    },
+    mounted() {
+        // this.$el.querySelector('.unit-btn').onclick = () => {
+        //     // eslint-disable-next-line no-alert
+        //     alert(this.value);
+        // };
     },
 };
 </script>

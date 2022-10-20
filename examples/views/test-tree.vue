@@ -382,7 +382,7 @@ export default {
         renderContent(h, { node, data }) {
             return (
             <span class="custom-tree-node">
-                <span>{node.label}</span>
+                <span style="margin: auto;">{node.label}</span>
                 <span class="node-operate" style="margin-left: 30px;">
                     { node.level === 1 ? <el-button size="mini" type="text" icon="el-icon-plus" on-click={ () => this.handlerAddSubNode(node, data) }>新增子节点</el-button> : '' }
                     <el-button size="mini" type="text" on-click={ () => this.handlerEditNode(node, data) }>编辑</el-button>

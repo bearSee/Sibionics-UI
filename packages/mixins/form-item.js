@@ -20,15 +20,15 @@ export default {
                 'datetimerange',
                 'monthrange',
             ].includes(type) || (type === 'time' && isRange);
+            const form = this.currentForm || this.searchForm;
             if (valueSplit && startCode && endCode) {
-                const form = this.currentForm || this.searchForm;
                 this.$set(form, startCode, value && value[0] || '');
                 this.$set(form, endCode, value && value[1] || '');
             }
             if (['cascader', 'dropselect'].includes(type)) {
                 if (this.$refs.form) this.$refs.form.clearValidate();
             }
-            this.$emit('form-item-change', value, info);
+            this.$emit('form-item-change', value, info, form);
             this.resetRelationshipFields(value, info);
             this.resetRelationResultFields(info);
         },

@@ -140,8 +140,8 @@
             v-model="currentValue[0]"
             :placeholder="props.startPlaceholder || `${$t('请输入')}${$t(props.label || '')}`"
             :disabled="disabled || props.disabled"
-            :min="props.min"
-            :max="currentValue[1]"
+            :min="props.min === 0 ? 0 : (props.min || -Infinity)"
+            :max="currentValue[1] === 0 ? 0 : (currentValue[1] || Infinity)"
             :step="props.step"
             :step-strictly="props.stepStrictly"
             :precision="props.precision"
@@ -164,8 +164,8 @@
             v-model="currentValue[1]"
             :placeholder="props.endPlaceholder || `${$t('请输入')}${$t(props.label || '')}`"
             :disabled="disabled || props.disabled"
-            :min="currentValue[0]"
-            :max="props.max"
+            :min="currentValue[0] === 0 ? 0 : (currentValue[0] || -Infinity)"
+            :max="props.max === 0 ? 0 : (props.max || Infinity)"
             :step="props.step"
             :step-strictly="props.stepStrictly"
             :precision="props.precision"
@@ -189,6 +189,7 @@
       :size="props.size || size"
       :data-props="props.optionProps"
       :data="props.options"
+      :option-key="props.optionKey"
       :clearable="props.clearable !== false"
       @clear="handlerClear"
       @change="handlerSelectChange" />
@@ -212,10 +213,14 @@
       @visible-change="handlerVisibleChange">
       <el-option
         v-for="item in (props.options || [])"
-        :key="item[optionProps.key]"
+        :key="item[props.optionKey || optionProps.key]"
         :label="item[optionProps.value]"
         :value="item[optionProps.key]"
-        :disabled="item.disabled || props.disabled" />
+        :disabled="item.disabled || props.disabled">
+        <div
+          v-if="optionProps.customHTML && typeof optionProps.customHTML === 'function'"
+          v-html="optionProps.customHTML(item, props)" />
+      </el-option>
     </el-select>
     <el-cascader
       ref="cascader"
@@ -252,14 +257,26 @@
       :disabled="disabled || props.disabled"
       :size="props.size || size"
       @change="handlerSelectChange">
-      <el-checkbox
-        v-for="item in (props.options || [])"
-        :title="item[optionProps.value]"
-        :key="item[optionProps.key]"
-        :label="item[optionProps.key]"
-        :disabled="item.disabled || props.disabled">
-        {{ item[optionProps.value] }}
-      </el-checkbox>
+      <template v-if="props.groupStyle === 'button'">
+        <el-checkbox-button
+          v-for="item in (props.options || [])"
+          :title="item[optionProps.value]"
+          :key="item[props.optionKey || optionProps.key]"
+          :label="item[optionProps.key]"
+          :disabled="item.disabled || props.disabled">
+          {{ item[optionProps.value] }}
+        </el-checkbox-button>
+      </template>
+      <template v-else>
+        <el-checkbox
+          v-for="item in (props.options || [])"
+          :title="item[optionProps.value]"
+          :key="item[props.optionKey || optionProps.key]"
+          :label="item[optionProps.key]"
+          :disabled="item.disabled || props.disabled">
+          {{ item[optionProps.value] }}
+        </el-checkbox>
+      </template>
     </el-checkbox-group>
     <el-radio-group
       v-else-if="props.type === 'radio'"
@@ -267,14 +284,26 @@
       :disabled="disabled || props.disabled"
       :size="props.size || size"
       @change="handlerSelectChange">
-      <el-radio
-        v-for="item in (props.options || [])"
-        :title="item[optionProps.value]"
-        :key="item[optionProps.key]"
-        :label="item[optionProps.key]"
-        :disabled="item.disabled || props.disabled">
-        {{ item[optionProps.value] }}
-      </el-radio>
+      <template v-if="props.groupStyle === 'button'">
+        <el-radio-button
+          v-for="item in (props.options || [])"
+          :title="item[optionProps.value]"
+          :key="item[props.optionKey || optionProps.key]"
+          :label="item[optionProps.key]"
+          :disabled="item.disabled || props.disabled">
+          {{ item[optionProps.value] }}
+        </el-radio-button>
+      </template>
+      <template v-else>
+        <el-radio
+          v-for="item in (props.options || [])"
+          :title="item[optionProps.value]"
+          :key="item[props.optionKey || optionProps.key]"
+          :label="item[optionProps.key]"
+          :disabled="item.disabled || props.disabled">
+          {{ item[optionProps.value] }}
+        </el-radio>
+      </template>
     </el-radio-group>
     <el-switch
       v-else-if="props.type === 'switch'"
@@ -412,6 +441,7 @@
       :list-type="props.listType || 'text'"
       :accept="props.accept"
       :on-success="uploadSuccess"
+      :on-error="uploadError"
       :on-remove="uploadRemove"
       :before-upload="beforeUpload"
       :file-list="currentValue"
@@ -486,6 +516,12 @@
 import { encryptAES } from '../../../src/utils/encryption';
 import inputNumber from './input-number';
 
+const getUploadHeaders = () => ({
+    aun: window.localStorage.getItem(`accessToken-${window.systemId}`) || '',
+    mid: encryptAES(Array(8).fill().map(() => (((1 + Math.random()) * 0x10000) || 0).toString(16).substring(1)).join('')),
+    ts: encryptAES(window.SIB.formatDate(new Date(), 'YYYYMMDDhhmmss')),
+});
+
 export default {
     name: 'SibItem',
     components: { inputNumber },
@@ -512,10 +548,6 @@ export default {
         },
     },
     data() {
-        // UUID || 生成随机数
-        const uuid = Array(8).fill().map(() => (((1 + Math.random()) * 0x10000) || 0).toString(16).substring(1)).join('');
-        const aun = window.localStorage.getItem(`accessToken-${window.systemId}`) || '';
-        const timeStamp = window.SIB.formatDate(new Date(), 'YYYYMMDDhhmmss');
         return {
             currentValue: '',
             file: {},
@@ -523,11 +555,8 @@ export default {
             currentFormatValue: '',
             pickerVisible: false,
             treeVisible: false,
-            uploadHeaders: {
-                aun,
-                mid: encryptAES(uuid),
-                ts: encryptAES(timeStamp),
-            },
+            uploadHeaders: getUploadHeaders(),
+            loadingBox: null,
         };
     },
     computed: {
@@ -718,31 +747,48 @@ export default {
             }
         },
         beforeUpload(file) {
+            if (!this.loadingBox) {
+                this.loadingBox = this.$loading({
+                    lock: true,
+                    text: '正在上传...',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(250, 250, 250, 0.7)',
+                });
+            }
             const { maxSize, beforeUpload } = this.props;
             if (maxSize && file.size > (maxSize * 1024 * 1024)) {
-                this.$message.warning(this.$t('文件大小超过', { size: maxSize }));
+                this.$message.warning(`${this.$t('文件大小不能超过')}${maxSize}M`);
+                if (this.loadingBox) this.loadingBox.close();
                 return false;
             }
             if (typeof beforeUpload === 'function') {
-                return beforeUpload(file);
+                const bool = beforeUpload(file);
+                if (this.loadingBox && !bool) this.loadingBox.close();
+                return bool;
             }
             this.file = file;
             return true;
         },
         uploadSuccess(res) {
+            if (this.loadingBox) this.loadingBox.close();
             const { onSuccess } = this.props;
             res.name = res.filename || res.name || this.file.name;
             if (typeof onSuccess === 'function') {
                 res = onSuccess(res, this.file);
             }
             if (res) this.currentValue.push(res);
-
+            this.uploadHeaders = getUploadHeaders();
             // this.currentValue.push(res);
             // const code = (res.data || {}).code || '';
             // if (String(code) !== '200') {
             //     this.currentValue.pop(res);
             //     this.$message.warning(res.msg || this.$t('上传失败'));
             // }
+        },
+        uploadError(err) {
+            this.uploadHeaders = getUploadHeaders();
+            if (this.loadingBox) this.loadingBox.close();
+            if (this.props.onError) this.props.onError(err);
         },
         uploadRemove(file) {
             if (typeof this.propsonRemove === 'function') this.props.onRemove(file);
@@ -816,9 +862,11 @@ export default {
         handlerClear(index) {
             const { type, code, showCode } = this.props;
             if (this.isMultiple) {
-                const value = [...(this.currentValue || [])];
-                if (value[index] || value[index] === 0) value[index] = '';
-                this.currentValue = value;
+                if ((this.currentValue || [])[index] || (this.currentValue || [])[index] === 0) {
+                    this.$set((this.currentValue || []), index, '');
+                } else {
+                    this.currentValue = [];
+                }
             } else {
                 this.currentValue = '';
             }

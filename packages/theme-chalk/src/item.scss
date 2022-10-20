@@ -31,8 +31,8 @@
   .text-label {
       display: block;
       overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
+      // white-space: nowrap;
+      // text-overflow: ellipsis;
       margin-top: 6px;
       line-height: 1.5;
   }

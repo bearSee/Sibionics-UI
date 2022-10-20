@@ -46,7 +46,7 @@ export default {
             ],
             attributeData: [
                 {
-                    params: 'menus',
+                    params: 'customMenus',
                     des: '菜单配置',
                     type: 'Array',
                     values: '-',
@@ -65,6 +65,7 @@ export default {
     .sib-index-page {
         width: 1000px;
         height: 600px;
+        box-shadow: -1px 0px 0px 0px rgb(197 204 207), 0px 0px 8px 2px rgb(202 211 215);
         .main-content {
             overflow: hidden;
         }

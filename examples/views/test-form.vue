@@ -828,7 +828,7 @@ export default {
             ],
             slotData: [
                 {
-                    name: 'column.code',
+                    name: 'info.code',
                     des: '表单内部的插槽，name动态为该列code',
                     params: '当前的插槽配置、当前的表单数据(info, form)',
                 },

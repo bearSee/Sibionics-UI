@@ -10,6 +10,7 @@ export default {
     请选择结束时间: 'Please select the end time',
     点击上传: 'Upload',
     上传失败: 'Upload failed',
+    文件大小不能超过: 'File size cannot exceed ',
     '不限制文档类型，大小限制为': 'The document type is not limited, and the size is limited to ',
     序号: 'No.',
     收起: 'close',
@@ -18,4 +19,5 @@ export default {
     当前已勾选: 'Selected',
     条数据: 'pieces of data',
     清空: 'Clear',
+    刷新列表: 'Refresh List',
 };

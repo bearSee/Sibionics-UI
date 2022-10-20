@@ -1,5 +1,5 @@
 export default function formatDate(date = new Date(), format = 'YYYY-MM-DD') {
-  if (typeof date === 'number') date = new Date(date);
+  if (['number', 'string'].includes(typeof date)) date = new Date(date);
   if (date instanceof Date) {
     const o = {
       year: date.getFullYear(), // 年份

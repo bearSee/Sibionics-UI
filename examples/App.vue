@@ -268,10 +268,11 @@ export default {
     watch: {
         lang(val) {
             window.localStorage.setItem('lang', val);
-            this.loadingBox(`${this.$t('语言切换中')}...`);
-            setTimeout(() => {
-                window.location.reload();
-            }, 100);
+            this.$i18n.locale = val;
+            // this.loadingBox(`${this.$t('语言切换中')}...`);
+            // setTimeout(() => {
+            //     window.location.reload();
+            // }, 100);
         },
     },
 };
@@ -360,7 +361,7 @@ pre {
     border-bottom: 1px solid #ebeef5;
   }
   p {
-    margin-top: 0;
+    margin-bottom: 10px;
   }
 }
 .main-container {

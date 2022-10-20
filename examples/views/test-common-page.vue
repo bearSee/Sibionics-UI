@@ -81,6 +81,34 @@ export default {
                         label: '姓名',
                         code: 'name',
                         type: 'slot',
+                        // operateConfig 是打开副列表弹窗的配置项；配置了此字段，则在点击每一行的“姓名”时，将打开副列表弹窗；
+                        // 注意：该列设置为插槽类型（type='slot'）才生效
+                        operateConfig: {
+                            // 是否设置为非权限控制按钮（不考虑用户是否能操作的权限，固定展示该按钮则配置为true）
+                            unPermission: false,
+                            /**
+                             * 是否禁用
+                             * Boolean/Function(row, index)
+                             * row: 当前行数据
+                             * index: 当前行索引
+                             */
+                            disabled: (row, i) => i === 2,
+                            /**
+                             * 在主列表某一行点击打开查看副列表的弹窗后
+                             * 请求副列表数据时，将该行的 "id" 赋值给 "rowId"
+                             * params: { rowId: row.id } 将当做附加的请求参数去请求副列表的tableData
+                             */
+                            paramsKey: 'medicineId',
+                            paramsValueKey: 'id',
+                            /**
+                             * 点击指定的数据行内字段查看副列表的自定义方法 (row, config, requestConfig)，此场景适用于副列表不支持使用接口请求数据的情况或者需要重写接口请求配置时可使用
+                             * 该方法可以 return 一个 requestConfig 的接口请求配置，那么副列表弹窗正常打开；如果没 return，则不会打开副列表弹窗
+                             * row 点击时的行数据
+                             * config 该列的原始配置
+                             * requestConfig 请求接口配置的相关配置
+                             */
+                            customOperate: null,
+                        },
                     },
                     {
                         label: '性别',
@@ -104,82 +132,117 @@ export default {
                         showOverflowTooltip: false,
                     },
                 ],
-                tableData: Array(20).fill().map((_, i) => ({
+                tableData: Array(5).fill().map((_, i) => ({
                     name: `张三${i + 1}号`,
                     age: i + 10,
                     sex: i % 2,
                     status: i % 2,
-                    id: i,
+                    id: i + 1,
+                    children: [
+                        {
+                            name: `张三${i + 1}号的崽崽`,
+                            age: i + 1,
+                            sex: i % 2,
+                            status: i % 2,
+                            id: `id${i}`,
+                        },
+                    ],
                 })),
                 requestConfig: {
                     params: {},
                     callback: null,
                 },
-                importProps: {
-                    // 文件类型限制（默认excel表格的格式）
-                    accept: 'application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                    // 导入参数
-                    params: {},
-                    // 是否展示导入文件列表
-                    showFileList: false,
-                    // 是否展示导入提示文案
-                    showTips: false,
-                    // 导入按钮名称，默认为 "列表导入"
-                    btnText: '列表导入',
-                    // 上传前的回调方法，不 return 或者 return false 则中止上传
-                    beforeUpload: null,
-                    // 导入成功回调，组件内部提供refreshTable方法来刷新主列表和副列表的数据（this.$refs.pageComponent.refreshTable()）
-                    onSuccess: null,
-                },
                 buttonConfig: {
                     add: {
                         name: '新增人员',
+                        // show/disabled => 类型为 Function(data, selections) 或者 Boolean
+                        // data: 当前表格数据 selections: 当前选中的行数据
                         disabled: false,
                     },
                     sonAdd: {
                         name: '新增子级',
+                        // show/disabled => 类型为 Function(row, index) 或者 Boolean
+                        // row: 当前行数据 index: 当前行的下标
                         disabled: (row, i) => !!(i % 2),
                     },
                     edit: {
                         name: '编辑',
+                        // show/disabled => 类型为 Function(row, index) 或者 Boolean
+                        // row: 当前行数据 index: 当前行的下标
                         disabled: (row, i) => !!(i % 2),
                         show: (row, i) => !!(i % 3),
                     },
                     copy: {
                         name: '复制',
+                        // show/disabled => 类型为 Function(row, index) 或者 Boolean
+                        // row: 当前行数据 index: 当前行的下标
                         disabled: (row, i) => !!(i % 2),
                     },
                     import: {
                         name: '列表导入',
+                        // 类型为Boolean
                         disabled: false,
+                        // 以下为导入按钮特有的配置
+                        // 文件类型限制（默认excel表格的格式）
+                        accept: 'application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                        // 导入参数
+                        params: {},
+                        // 是否展示导入文件列表
+                        showFileList: false,
+                        // 是否展示导入提示文案
+                        showTips: false,
+                        // 导入按钮名称，默认为 "列表导入"
+                        btnText: '',
+                        // 文件key
+                        filename: 'file',
+                        // 文件大小限制（M）
+                        maxSize: 20,
+                        // 上传前的回调方法，不 return 或者 return false 则中止上传
+                        // beforeUpload: null,
+                        // 导入成功回调，组件内部提供refreshTable方法来刷新主列表和副列表的数据（this.$refs.pageComponent.refreshTable()）
+                        // onSuccess: null,
                     },
                     export: {
                         name: '列表导出',
+                        // show/disabled => 类型为 Function(data, selections) 或者 Boolean
+                        // data: 当前表格数据 selections: 当前选中的行数据
                         disabled: false,
                     },
                     delete: {
                         name: '删除',
+                        // show/disabled => 类型为 Function(row, index) 或者 Boolean
+                        // row: 当前行数据 index: 当前行的下标
                         disabled: (row, i) => !!(i % 2),
                         show: (row, i) => !!(i % 3),
                     },
                     batchDelete: {
                         name: '批量删除',
+                        // show/disabled => 类型为 Function(data, selections) 或者 Boolean
+                        // data: 当前表格数据 selections: 当前选中的行数据
                         disabled: false,
                     },
                     batchEnable: {
                         name: '批量启用',
+                        // show/disabled => 类型为 Function(data, selections) 或者 Boolean
+                        // data: 当前表格数据 selections: 当前选中的行数据
                         disabled: false,
                     },
                     batchDisable: {
                         name: '批量禁用',
+                        // show/disabled => 类型为 Function(data, selections) 或者 Boolean
+                        // data: 当前表格数据 selections: 当前选中的行数据
                         disabled: false,
                     },
                     enable: {
                         name: '启用',
+                        // show/disabled => 类型为 Function(row, index) 或者 Boolean
+                        // row: 当前行数据 index: 当前行的下标
                         disabled: (row, i) => !!(i % 3),
                     },
                     disable: {
                         name: '禁用',
+                        // show/disabled => 类型为 Function(row, index) 或者 Boolean
+                        // row: 当前行数据 index: 当前行的下标
                         disabled: (row, i) => !!(i % 3),
                     },
                 },
@@ -188,13 +251,6 @@ export default {
                     on: '1',
                     off: '0',
                 },
-                subViewConfig: {
-                    code: 'name',
-                    disabled: (row, i) => i === 3,
-                    paramsKey: 'medicineId',
-                    paramsValueKey: 'id',
-                },
-                handlerOpenSubList: null,
                 handlerDeleteRow: null,
                 handlerBatchDeleteRows: null,
                 handlerEnableRow: null,
@@ -257,8 +313,9 @@ export default {
                 form: {},
                 rules: {},
                 getSpecialConfig: null,
-                handlerSubmit: null,
                 beforeSubmit: null,
+                handlerSubmit: null,
+                submitSuccess: null,
             },
             subTableConfig: {
                 rowSize: 3,
@@ -353,8 +410,9 @@ export default {
                 form: {},
                 rules: {},
                 getSpecialConfig: null,
-                handlerSubmit: null,
                 beforeSubmit: null,
+                handlerSubmit: null,
+                submitSuccess: null,
             },
             attributeData: [
                 {
@@ -527,6 +585,34 @@ export default {
                         label: '姓名',
                         code: 'name',
                         type: 'slot',
+                        // operateConfig 是打开副列表弹窗的配置项；配置了此字段，则在点击每一行的“姓名”时，将打开副列表弹窗；
+                        // 注意：该列设置为插槽类型（type='slot'）才生效
+                        operateConfig: {
+                            // 是否设置为非权限控制按钮（不考虑用户是否能操作的权限，固定展示该按钮则配置为true）
+                            unPermission: false,
+                            /**
+                             * 是否禁用
+                             * Boolean/Function(row, index)
+                             * row: 当前行数据
+                             * index: 当前行索引
+                             */
+                            disabled: (row, i) => i === 3,
+                            /**
+                             * 在主列表某一行点击打开查看副列表的弹窗后
+                             * 请求副列表数据时，将该行的 "id" 赋值给 "rowId"
+                             * params: { rowId: row.id } 将当做附加的请求参数去请求副列表的tableData
+                             */
+                            paramsKey: 'rowId',
+                            paramsValueKey: 'id',
+                            /**
+                             * 点击指定的数据行内字段查看副列表的自定义方法 (row, config, requestConfig)，此场景适用于副列表不支持使用接口请求数据的情况或者需要重写接口请求配置时可使用
+                             * 该方法可以 return 一个 requestConfig 的接口请求配置，那么副列表弹窗正常打开；如果没 return，则不会打开副列表弹窗
+                             * row 点击时的行数据
+                             * config 该列的原始配置
+                             * requestConfig 请求接口配置的相关配置
+                             */
+                            customOperate: null,
+                        },
                     },
                     {
                         label: '性别',
@@ -563,73 +649,98 @@ export default {
                     params: {},
                     callback: null,
                 },
-                // 列表导入配置
-                importProps: {
-                    // 文件类型限制（默认excel表格的格式）
-                    accept: 'application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                    // 导入参数
-                    params: {},
-                    // 是否展示导入文件列表
-                    showFileList: false,
-                    // 是否展示导入提示文案
-                    showTips: false,
-                    // 导入按钮名称，默认为 "列表导入"
-                    btnText: '列表导入',
-                    // 上传前的回调方法，不 return 或者 return false 则中止上传
-                    beforeUpload: null,
-                    // 导入成功回调，组件内部提供refreshTable方法来刷新主列表和副列表的数据（this.$refs.pageComponent.refreshTable()）
-                    onSuccess: null,
-                },
                 // 按钮配置
                 buttonConfig: {
                     add: {
                         name: '新增人员',
+                        // show/disabled => 类型为 Function(data, selections) 或者 Boolean
+                        // data: 当前表格数据 selections: 当前选中的行数据
                         disabled: false,
                     },
                     sonAdd: {
                         name: '新增子级',
+                        // show/disabled => 类型为 Function(row, index) 或者 Boolean
+                        // row: 当前行数据 index: 当前行的下标
                         disabled: (row, i) => !!(i % 2),
                     },
                     edit: {
                         name: '编辑',
+                        // show/disabled => 类型为 Function(row, index) 或者 Boolean
+                        // row: 当前行数据 index: 当前行的下标
                         disabled: (row, i) => !!(i % 2),
                         show: (row, i) => !!(i % 3),
                     },
                     copy: {
                         name: '复制',
+                        // show/disabled => 类型为 Function(row, index) 或者 Boolean
+                        // row: 当前行数据 index: 当前行的下标
                         disabled: (row, i) => !!(i % 2),
                     },
                     import: {
                         name: '列表导入',
+                        // 类型为Boolean
                         disabled: false,
+                        // 以下为导入按钮特有的配置
+                        // 文件类型限制（默认excel表格的格式）
+                        accept: 'application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                        // 导入参数
+                        params: {},
+                        // 是否展示导入文件列表
+                        showFileList: false,
+                        // 是否展示导入提示文案
+                        showTips: false,
+                        // 导入按钮名称，默认为 "列表导入"
+                        btnText: '',
+                        // 文件key
+                        filename: 'file',
+                        // 文件大小限制（M）
+                        maxSize: 20,
+                        // 上传前的回调方法，不 return 或者 return false 则中止上传
+                        // beforeUpload: null,
+                        // 导入成功回调，组件内部提供refreshTable方法来刷新主列表和副列表的数据（this.$refs.pageComponent.refreshTable()）
+                        // onSuccess: null,
                     },
                     export: {
                         name: '列表导出',
+                        // show/disabled => 类型为 Function(data, selections) 或者 Boolean
+                        // data: 当前表格数据 selections: 当前选中的行数据
                         disabled: false,
                     },
                     delete: {
                         name: '删除',
+                        // show/disabled => 类型为 Function(row, index) 或者 Boolean
+                        // row: 当前行数据 index: 当前行的下标
                         disabled: (row, i) => !!(i % 2),
                         show: (row, i) => !!(i % 3),
                     },
                     batchDelete: {
                         name: '批量删除',
+                        // show/disabled => 类型为 Function(data, selections) 或者 Boolean
+                        // data: 当前表格数据 selections: 当前选中的行数据
                         disabled: false,
                     },
                     batchEnable: {
                         name: '批量启用',
+                        // show/disabled => 类型为 Function(data, selections) 或者 Boolean
+                        // data: 当前表格数据 selections: 当前选中的行数据
                         disabled: false,
                     },
                     batchDisable: {
                         name: '批量禁用',
+                        // show/disabled => 类型为 Function(data, selections) 或者 Boolean
+                        // data: 当前表格数据 selections: 当前选中的行数据
                         disabled: false,
                     },
                     enable: {
                         name: '启用',
+                        // show/disabled => 类型为 Function(row, index) 或者 Boolean
+                        // row: 当前行数据 index: 当前行的下标
                         disabled: (row, i) => !!(i % 3),
                     },
                     disable: {
                         name: '禁用',
+                        // show/disabled => 类型为 Function(row, index) 或者 Boolean
+                        // row: 当前行数据 index: 当前行的下标
                         disabled: (row, i) => !!(i % 3),
                     },
                 },
@@ -642,32 +753,6 @@ export default {
                     // 数据行被禁用时的值(row.status === '0'代表被禁用)
                     off: '0',
                 },
-                // 点击指定的数据行内字段（姓名）查看副列表的相关配置，对应tableColumn下的（姓名）列配置需设置为插槽类型（type='slot'）
-                subViewConfig: {
-                    // 将主列表中字段为 'name' 的单元格设置为按钮，点击打开副列表弹窗，查看副列表数据
-                    code: 'name',
-                    /**
-                     * 是否禁用
-                     * Boolean/Function(row, index)
-                     * row: 当前行数据
-                     * index: 当前行索引
-                     */
-                    disabled: (row, i) => i === 3,
-                    /**
-                     * 在主列表某一行点击打开查看副列表的弹窗后
-                     * 请求副列表数据时，将该行的 "id" 赋值给 "rowId"
-                     * params: { rowId: row.id } 将当做附加的请求参数去请求副列表的tableData
-                     */
-                    paramsKey: 'rowId',
-                    paramsValueKey: 'id',
-                },
-                /**
-                 * 点击指定的数据行内字段查看副列表的自定义方法 (row, requestConfig, callback)
-                 * row 点击时的行数据
-                 * requestConfig 请求接口配置的相关配置
-                 * callback 打开副列表弹窗的回调方法
-                 */
-                handlerOpenSubList: null,
                 /**
                  * 删除行自定义方法 (row, requestConfig, callback)
                  * row 需要删除的行数据对象
@@ -798,6 +883,17 @@ export default {
                  */
                 getSpecialConfig: null,
                 /**
+                 * 表单自动提交前的预处理方法；
+                 * ①支持return新的form对象进行提交
+                 * ②支持return false 中止提交
+                 * ③return 的值不为以上两种情况，或不return，则使用原form对象提交
+                 * beforeSubmit(obj)
+                 * obj.form: 当前表单数据
+                 * obj.type: 当前操作类型
+                 * obj.currentRow: 当前行数据对象
+                 */
+                beforeSubmit: null,
+                /**
                  * 自定义提交表单方法
                  * handlerSubmit(obj, callback)
                  * obj.form: 当前表单数据
@@ -808,13 +904,12 @@ export default {
                  */
                 handlerSubmit: null,
                 /**
-                 * 表单自动提交前的预处理方法，需return新的form对象
-                 * handlerSubmit(obj)
+                 * 表单提交的方法
+                 * submitSuccess(form, type)
                  * obj.form: 当前表单数据
                  * obj.type: 当前操作类型
-                 * obj.currentRow: 当前行数据对象
                  */
-                beforeSubmit: null,
+                submitSuccess: null,
             },
             // 副列表查询配置
             subTableConfig: {
@@ -996,6 +1091,17 @@ export default {
                  */
                 getSpecialConfig: null,
                 /**
+                 * 表单自动提交前的预处理方法；
+                 * ①支持return新的form对象进行提交
+                 * ②支持return false 中止提交
+                 * ③return 的值不为以上两种情况，或不return，则使用原form对象提交
+                 * beforeSubmit(obj)
+                 * obj.form: 当前表单数据
+                 * obj.type: 当前操作类型
+                 * obj.currentRow: 当前行数据对象
+                 */
+                beforeSubmit: null,
+                /**
                  * 自定义提交表单方法
                  * handlerSubmit(obj, callback)
                  * obj.form: 当前表单数据
@@ -1006,13 +1112,12 @@ export default {
                  */
                 handlerSubmit: null,
                 /**
-                 * 表单自动提交前的预处理方法，需return新的form对象
-                 * handlerSubmit(obj)
+                 * 表单提交的方法
+                 * submitSuccess(form, type)
                  * obj.form: 当前表单数据
                  * obj.type: 当前操作类型
-                 * obj.currentRow: 当前行数据对象
                  */
-                beforeSubmit: null,
+                submitSuccess: null,
             },
         };
     },

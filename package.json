@@ -10,15 +10,17 @@
     "lib"
   ],
   "scripts": {
-    "serve": "npm run lib && npm run build:scss && npm run build:utils && vue-cli-service serve",
+    "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "build:utils": "babel src/utils --out-dir lib/utils --ignore src/utils/common",
     "build:filters": "babel src/filters --out-dir lib/filters --ignore src/filters/index.js",
+    "build:locale": "babel src/locale --out-dir lib/locale",
     "build:scss": "cp-cli packages/theme-chalk/src lib/theme-chalk",
     "build:theme": "gulp build --gulpfile packages/theme-chalk/gulpfile.js && cp-cli packages/theme-chalk/lib lib/theme-chalk",
     "build:demo": "vue-cli-service build --mode release",
     "lib": "vue-cli-service build --target lib --name sibionics --dest lib src/index.js --no-clean",
-    "dist": "npm run lib && npm run build:scss && npm run build:utils && npm publish && npm run build:demo",
+    "pack": "npm run lib && npm run build:utils && npm run build:locale && npm run build:scss",
+    "dist": "npm run pack && npm publish && npm run build:demo",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
@@ -29,11 +31,11 @@
     "element-ui": "^2.15.6",
     "jsencrypt": "^3.2.0",
     "node-rsa": "^1.1.1",
+    "nprogress": "^0.2.0",
     "qs": "^6.9.1",
     "regenerator-runtime": "^0.13.5",
     "resize-observer-polyfill": "^1.5.1",
-    "throttle-debounce": "^2.1.0",
-    "vue-i18n": "^5.0.3"
+    "throttle-debounce": "^2.1.0"
   },
   "peerDependencies": {
     "vue": "^2.6.10"
@@ -51,7 +53,6 @@
     "axios": "^0.19.0",
     "babel-eslint": "^8.2.1",
     "cp-cli": "^2.0.0",
-    "sibionics-ui": "0.1.1",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
     "gulp": "^4.0.2",
@@ -59,15 +60,12 @@
     "gulp-cssmin": "^0.2.0",
     "gulp-postcss": "^8.0.0",
     "gulp-sass": "^4.0.2",
-    "js-cookie": "^2.2.1",
     "lint-staged": "^9.4.3",
     "postcss-pxtorem": "^5.1.1",
     "sass": "~1.32.6",
     "sass-loader": "^8.0.0",
     "vue": "^2.6.10",
-    "vue-cookies": "^1.6.0",
-    "vue-echarts": "^4.1.0",
-    "vue-i18n": "^8.15.1",
+    "vue-i18n": "^8.27.2",
     "vue-router": "^3.1.3",
     "vue-template-compiler": "^2.6.10",
     "webpack-merge": "^4.2.2",
@@ -83,8 +81,133 @@
       "git add"
     ]
   },
-  "version": "1.2.29",
+  "version": "1.3.20",
   "versionTips": [
+    {
+      "version": "1.3.19",
+      "time": "2022-10-13",
+      "tips": [
+        "Form 组件 itemInfo 属性添加深度监听，配置内的字段发生变化将触发校验规则和初始化表单值的更新。"
+      ]
+    },
+    {
+      "version": "1.3.19",
+      "time": "2022-10-08",
+      "tips": [
+        "CommonPage 组件内的表单自动提交前的预处理方法beforeSubmit: ①支持return新的form对象进行提交 ②支持return false 中止提交 ③return 的值不为以上两种情况，或不return，则使用原form对象提交"
+      ]
+    },
+    {
+      "version": "1.3.14",
+      "time": "2022-10-08",
+      "tips": [
+        "Item[type=radio] 组件和 Item[type=check] 组件新增通过传入 groupStyle: 'button' 设置按钮组风格"
+      ]
+    },
+    {
+      "version": "1.3.13",
+      "time": "2022-09-13",
+      "tips": [
+        "Form、Table、Item 组件功能优化"
+      ]
+    },
+    {
+      "version": "1.3.11",
+      "time": "2022-09-06",
+      "tips": [
+        "Item[type=upload] 组件上传文件时，请求头mid未刷新导致上传失败的问题修复"
+      ]
+    },
+    {
+      "version": "1.3.9",
+      "time": "2022-08-29",
+      "tips": [
+        "Table 组件刷新列表功能按钮未清除已选中数据的问题修复",
+        "Table 组件刷新列表功能按钮支持通过 isRefresh 字段控制是否展示"
+      ]
+    },
+    {
+      "version": "1.3.8",
+      "time": "2022-08-24",
+      "tips": [
+        "Table 组件新增刷新列表功能按钮",
+        "Form 组件 label 类型控件样式优化"
+      ]
+    },
+    {
+      "version": "1.3.7",
+      "time": "2022-08-23",
+      "tips": [
+        "Table 组件删除当页最后一条数据后，未自动请求上一页数据的Bug修复",
+        "CommonPage 组件在导入excel表格文件时，校验后缀为xls的文件出现异常的Bug修复"
+      ]
+    },
+    {
+      "version": "1.3.5",
+      "time": "2022-07-28",
+      "tips": [
+        "CommonPage 组件 operate 插槽Bug修复"
+      ]
+    },
+    {
+      "version": "1.3.4",
+      "time": "2022-07-19",
+      "tips": [
+        "Item 下拉框组件(type = select)支持自定义 option 的html块",
+        "Web文档及Demo代码更新"
+      ]
+    },
+    {
+      "version": "1.3.3",
+      "time": "2022-07-15",
+      "tips": [
+        "框架国际化 I18n 功能调整"
+      ]
+    },
+    {
+      "version": "1.3.2",
+      "time": "2022-07-12",
+      "tips": [
+        "CommonPage 组件按钮防抖处理、导入功能添加全局状态遮罩"
+      ]
+    },
+    {
+      "version": "1.3.1",
+      "time": "2022-07-12",
+      "tips": [
+        "CommonPage 组件支持 expand 插槽；其他功能优化"
+      ]
+    },
+    {
+      "version": "1.3.0",
+      "time": "2022-06-30",
+      "tips": [
+        "新增 nprogress 控件，展示浏览器进度条",
+        "样式优化"
+      ]
+    },
+    {
+      "version": "1.2.34",
+      "time": "2022-06-29",
+      "tips": [
+        "commonPage 组件优化副列表弹窗打开方式，支持自定义点击方法",
+        "其他 bug 修复"
+      ]
+    },
+    {
+      "version": "1.2.31",
+      "time": "2022-06-22",
+      "tips": [
+        "默认样式优化及调整、解决新项目安装该依赖字号异常问题"
+      ]
+    },
+    {
+      "version": "1.2.30",
+      "time": "2022-06-15",
+      "tips": [
+        "Number.prototype.toFixed 在 0.1 保留一位小数时处理成 0 的bug修复"
+      ]
+    },
     {
       "version": "1.2.29",
       "time": "2022-06-08",

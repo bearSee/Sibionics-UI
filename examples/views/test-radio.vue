@@ -18,6 +18,7 @@
         <h4>2、从接口请求数据</h4>
         <li>配置 requestConfig: { url: ' ', method: ' ', params: { }, callback: () => {} } </li>
         <li>optionProps: { key: ' ', value: ' ' } 获取完后台数据后，通过配置optionProps用于指定选中的数据中value字段用于展示，key字段用来保存</li>
+        <li>配置 groupStyle: 'button' 可以将选项设置为按钮组风格 </li>
       </div>
       <p>{{ $t('当前已选择') }}：{{ value2 || '--' }}</p>
       <sib-item
@@ -81,6 +82,7 @@ export default {
                     key: 'id',
                     value: 'name',
                 },
+                groupStyle: 'button',
                 requestConfig: {
                     url: '/table-data.json',
                     method: 'get',
@@ -140,6 +142,13 @@ export default {
                     defaultVal: 'false',
                 },
                 {
+                    params: 'props.groupStyle',
+                    des: '选项框风格',
+                    type: 'Boolean',
+                    values: "'button'/'normal'",
+                    defaultVal: "'normal'",
+                },
+                {
                     params: 'props.disabled',
                     des: '是否禁用',
                     type: 'Boolean',
@@ -166,6 +175,13 @@ export default {
                     type: 'Array',
                     values: '-',
                     defaultVal: '[]',
+                },
+                {
+                    params: 'props.optionKey',
+                    des: '定义单选选项的唯一key，用来优化渲染；默认从 props.optionProps.key 取值（若单选选项唯一key重复，可能需要用到该字段）',
+                    type: 'String/Number',
+                    values: '-',
+                    defaultVal: '-',
                 },
                 {
                     params: 'props.options[i].key',

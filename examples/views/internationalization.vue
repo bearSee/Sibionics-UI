@@ -62,6 +62,8 @@ export default {
                     code: // eslint-disable-next-line vue/script-indent
 `import Vue from 'vue';
 import App from './App';
+// 建议 vue-i18n 安装v8.x版本
+import VueI18n from 'vue-i18n';
 
 // ${this.$t('引入 sibionics-ui')}
 import sibUI from 'sibionics-ui';
@@ -69,24 +71,33 @@ import sibUI from 'sibionics-ui';
 // ${this.$t('引入样式表')}
 import 'sibionics-ui/lib/sibionics.css';
 
+// ${this.$t('引入sibionics-ui语言包')}
+import messages from 'sibionics-ui/lib/locale';
 // ${this.$t('引入本地中文语言配置')}
-import en from './locale/lang/en.json';
+import en from './locale/lang/en';
 // ${this.$t('引入本地英文语言配置')}
-import cn from './locale/lang/cn.json';
+import cn from './locale/lang/cn';
 // ${this.$t('引入本地其他语言配置')}
-// import xx from 'xx.json';
+// import xx from 'xx';
+
+Vue.use(VueI18n);
+
+const i18n = new VueI18n({
+    locale: window.localStorage.getItem('lang') || 'zh-CN',
+    messages: {
+        'en-US': { ...messages['en-US'], ...en },
+        'zh-CN': { ...messages['zh-CN'], ...cn },
+    },
+});
 
 Vue.use(sibUI, {
-    // ${this.$t('语言包')}
-    languages: { 'zh-CN': cn, 'en-US': en },
-    // ${this.$t('设置初始语言')}
-    lang: window.localStorage.getItem('lang') || 'zh-CN',
     // ${this.$t('控制饿了么组件默认尺寸，非必传， 可选值')}: large/small/mini
     size: 'mini',
 });
 
 
 new Vue({
+    i18n,
     render: h => h(App),
 }).$mount('#app');
 `,
@@ -121,12 +132,6 @@ new Vue({
 export default {
     data() {
         return {
-            loadingBox: (text = '') => this.$loading({
-                lock: true,
-                text,
-                spinner: 'el-icon-loading',
-                background: 'rgba(0, 0, 0, 0.7)',
-            }),
             lang: window.localStorage.getItem('lang') || 'zh-CN',
             langProps: {
                 type: 'select',
@@ -145,12 +150,9 @@ export default {
         };
     },
     watch: {
-        lang: {
+        lang(val) {
             window.localStorage.setItem('lang', val);
-            this.loadingBox('${this.$t('语言切换中')}...');
-            setTimeout(() => {
-                window.location.reload();
-            }, 100);
+            this.$i18n.locale = val;
         },
     },
 };
@@ -162,10 +164,11 @@ export default {
     watch: {
         lang(val) {
             window.localStorage.setItem('lang', val);
-            this.loadingBox(`${this.$t('语言切换中')}...`);
-            setTimeout(() => {
-                window.location.reload();
-            }, 100);
+            this.$i18n.locale = val;
+            // this.loadingBox(`${this.$t('语言切换中')}...`);
+            // setTimeout(() => {
+            //     window.location.reload();
+            // }, 100);
         },
     },
 };

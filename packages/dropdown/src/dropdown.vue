@@ -34,7 +34,7 @@
       <el-dropdown-menu slot="dropdown">
         <el-dropdown-item
           v-for="item in data"
-          :key="item[dataProps.key]"
+          :key="item[optionKey || dataProps.key]"
           :divided="item.divided"
           :disabled="item.disabled"
           :command="item[dataProps.key]">
@@ -104,6 +104,10 @@ export default {
         dataProps: {
             type: Object,
             default: () => ({ key: 'key', value: 'value' }),
+        },
+        optionKey: {
+            type: String,
+            default: '',
         },
         // 下拉菜单数据 [{ key: 'name', value: '姓名' }]
         data: {

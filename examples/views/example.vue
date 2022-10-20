@@ -50,6 +50,11 @@ export default {
             type: String,
             default: '',
         },
+        // 自定义Data数据代码串
+        slotDataString: {
+            type: String,
+            default: '',
+        },
         // 自定义方法代码串
         methodTemplateString: {
             type: String,
@@ -91,7 +96,7 @@ export default {
 export default {
     name: 'ExampleBox',
     data() {
-        return ${JSON.stringify(this.componentData, null, 13)};
+        return ${this.slotDataString || JSON.stringify(this.componentData, null, 13)};
     },
     methods: {${this.methodString}${this.methodTemplateString}
     },

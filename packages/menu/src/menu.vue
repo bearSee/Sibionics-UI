@@ -20,6 +20,9 @@
       :collapse="collapse"
       :unique-opened="uniqueOpened"
       :mode="mode"
+      :background-color="backgroundColor"
+      :text-color="textColor"
+      :active-text-color="activeTextColor"
       :default-active="defaultActive || this.$route.path || null"
       @select="handlerSelect">
       <template v-for="(menu, index) of menus">
@@ -94,6 +97,18 @@ export default {
         menus: {
             type: Array,
             default: () => ([]),
+        },
+        backgroundColor: {
+            type: String,
+            default: '',
+        },
+        textColor: {
+            type: String,
+            default: '',
+        },
+        activeTextColor: {
+            type: String,
+            default: '',
         },
     },
     data() {

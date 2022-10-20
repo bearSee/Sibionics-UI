@@ -97,10 +97,10 @@ export default {
             //     return;
             // }
             this.$emit('selection-change', this.selection);
-            this.handleClose();
         },
         handleClose() {
             this.$emit('update:visible', false);
+            this.$emit('cancel');
         },
     },
 };

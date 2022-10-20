@@ -17,7 +17,7 @@
     <example :ignore-keys="['input']">
       <div slot="describe">
         <h4>2、隐藏控制按钮，设置小数精度，控制输入范围 5 - 10</h4>
-        <li>详情示例请参照 <a href="/#/number">Number表单元素</a></li>
+        <li>详情示例请参照 <a href="/sibionics-ui/#/number">Number表单元素</a></li>
       </div>
       <div class="number-range-value">
         {{ value2 }}

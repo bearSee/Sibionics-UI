@@ -14,7 +14,7 @@
       :rules="currentRules"
       :label-position="labelPosition"
       :label-width="labelWidth ? `${labelWidth}px` : 'auto'">
-      <template v-for="info of itemInfo">
+      <template v-for="(info, i) of itemInfo">
         <el-form-item
           ref="formItems"
           :class="[info.code + '-temp sib-form__temp', info.labelTips ? 'sib-form-tips__temp' : '', isCalculated && 'is-calculated']"
@@ -29,6 +29,7 @@
             <slot
               :name="info.code"
               :info="info"
+              :index="i"
               :form="currentForm" />
           </template>
           <sib-item
@@ -38,6 +39,7 @@
             :class="`sib-item-${info.type}`"
             :props="info"
             :disabled="disabled"
+            :size="size"
             :format-value="currentForm[info.showCode]"
             @item-change="handlerChangeItem($event, info)"
             @select-change="handlerSelectChange($event, info)"
@@ -177,11 +179,15 @@ export default {
                 });
             },
         },
-        itemInfo() {
-            this.initForm(true);
-            this.$nextTick(() => {
-                if (this.$refs.form) this.$refs.form.clearValidate();
-            });
+        itemInfo: {
+            deep: true,
+            handler() {
+                this.initForm(true);
+                this.$nextTick(() => {
+                    if (this.$refs.form) this.$refs.form.clearValidate();
+                    this.resetFormItemWidth();
+                });
+            },
         },
         currentForm: {
             deep: true,

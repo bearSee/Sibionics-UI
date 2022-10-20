@@ -62,7 +62,7 @@ Number.prototype.toFixed = function (n) {
   if (typeof n === 'undefined' || n === 0) {
     return (Math.round(number)).toString();
   }
-  if (Math.abs(number) <= 10 ** -n) {
+  if (Math.abs(number) <= 10 ** -(n + 1)) {
     number = 0;
   }
 
