@@ -81,10 +81,17 @@
       "git add"
     ]
   },
-  "version": "1.3.20",
+  "version": "1.4.0",
   "versionTips": [
     {
-      "version": "1.3.19",
+      "version": "1.4.0",
+      "time": "2022-10-27",
+      "tips": [
+        "Item[type=numberrange] 组件修复致命Bug，该Bug曾导致此组件双向绑定的默认值为 null/空字符串/空数组 时，出现页面卡死(死循环)的情况。"
+      ]
+    },
+    {
+      "version": "1.3.20",
       "time": "2022-10-13",
       "tips": [
         "Form 组件 itemInfo 属性添加深度监听，配置内的字段发生变化将触发校验规则和初始化表单值的更新。"

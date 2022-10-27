@@ -658,7 +658,7 @@ export default {
                 if ((this.currentValue && value) && JSON.stringify(this.currentValue || '[]') === JSON.stringify(value || '[]')) return;
                 value = isString ? (value && value.split(',') || []) : JSON.parse(JSON.stringify(value));
                 const isNumber = dataType === 'number' || type === 'numberrange' || optionProps.valueType === 'number';
-                if (isNumber) value = value.map((v) => Number(v) || '');
+                if (isNumber) value = value.map((v) => (v === 0 ? 0 : (Number(v) || '')));
             }
             if (type === 'time' && isRange && isPicker && !value.length) {
                 value = ['', ''];

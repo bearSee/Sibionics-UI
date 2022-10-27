@@ -9,7 +9,7 @@
       <li
         v-for="(d, i) in vers.tips"
         :key="i">
-        {{ d }}
+        {{ d }} @bearsee
       </li>
     </div>
     <el-backtop target=".master-page" />
