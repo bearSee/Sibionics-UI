@@ -809,6 +809,7 @@ export default {
                 },
             });
             this.handlerChange();
+            this.pickerVisible = false;
         },
         // tree弹窗选择框
         handlerTreePickerChange(checked, halfChecked) {
@@ -829,6 +830,7 @@ export default {
                 },
             });
             this.handlerChange();
+            this.treeVisible = false;
         },
         // table弹窗选择框 数据转换
         tanslateTableData(data = {}) {

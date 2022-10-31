@@ -110,10 +110,11 @@ export default {
                 const noeObj = this.$refs.sibTree.getCurrentNode();
                 this.$emit('selection-change', [noeObj], []);
             }
-            this.handleClose();
+            // this.handleClose();
         },
         handleClose() {
             this.$emit('update:visible', false);
+            this.$emit('cancel');
         },
     },
 };

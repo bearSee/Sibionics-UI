@@ -81,8 +81,15 @@
       "git add"
     ]
   },
-  "version": "1.4.0",
+  "version": "1.4.1",
   "versionTips": [
+    {
+      "version": "1.4.1",
+      "time": "2022-10-30",
+      "tips": [
+        "TablePicker 组件选中数据提交后未关闭弹窗的 Bug 修复"
+      ]
+    },
     {
       "version": "1.4.0",
       "time": "2022-10-27",
