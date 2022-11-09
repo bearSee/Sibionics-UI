@@ -81,10 +81,10 @@
       "git add"
     ]
   },
-  "version": "1.4.2",
+  "version": "1.4.3",
   "versionTips": [
     {
-      "version": "1.4.2",
+      "version": "1.4.3",
       "time": "2022-11-09",
       "tips": [
         "Item[type=upload] 组件整体逻辑优化",
