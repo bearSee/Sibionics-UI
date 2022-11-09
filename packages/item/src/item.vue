@@ -754,14 +754,12 @@ export default {
             }
         },
         beforeUpload(file) {
-            if (!this.loadingBox) {
-                this.loadingBox = this.$loading({
-                    lock: true,
-                    text: '正在上传...',
-                    spinner: 'el-icon-loading',
-                    background: 'rgba(250, 250, 250, 0.7)',
-                });
-            }
+            this.loadingBox = this.$loading({
+                lock: true,
+                text: '正在上传...',
+                spinner: 'el-icon-loading',
+                background: 'rgba(250, 250, 250, 0.7)',
+            });
             const { maxSize, beforeUpload } = this.props;
             if (maxSize && file.size > (maxSize * 1024 * 1024)) {
                 this.$message.warning(`${this.$t('文件大小不能超过')}${maxSize}M`);
@@ -794,14 +792,12 @@ export default {
         async onRemove(file, fileList) {
             let files = fileList;
             if (typeof this.props.onRemove === 'function') {
-                if (!this.loadingBox) {
-                    this.loadingBox = this.$loading({
-                        lock: true,
-                        text: '正在上传...',
-                        spinner: 'el-icon-loading',
-                        background: 'rgba(250, 250, 250, 0.7)',
-                    });
-                }
+                this.loadingBox = this.$loading({
+                    lock: true,
+                    text: '正在删除...',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(250, 250, 250, 0.7)',
+                });
                 files = await this.props.onRemove(file, fileList);
                 files = files || fileList;
                 if (this.loadingBox) this.loadingBox.close();
