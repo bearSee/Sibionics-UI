@@ -273,14 +273,6 @@ export default {
             type: Array,
             default: () => ([]),
         },
-        submitText: {
-            type: String,
-            default: '查询',
-        },
-        cancelText: {
-            type: String,
-            default: '重置',
-        },
         // 是否支持敲回车查询
         enterable: {
             type: Boolean,
@@ -300,6 +292,14 @@ export default {
         isCancel: {
             type: Boolean,
             default: true,
+        },
+        submitText: {
+            type: String,
+            default: '查询',
+        },
+        cancelText: {
+            type: String,
+            default: '重置',
         },
         // 表单域标签的位置
         labelPosition: {

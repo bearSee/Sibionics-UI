@@ -81,8 +81,16 @@
       "git add"
     ]
   },
-  "version": "1.4.1",
+  "version": "1.4.2",
   "versionTips": [
+    {
+      "version": "1.4.2",
+      "time": "2022-11-09",
+      "tips": [
+        "Item[type=upload] 组件整体逻辑优化",
+        "Table 组件新增 submitText、cancelText 属性来配置搜索表单的按钮文案内容"
+      ]
+    },
     {
       "version": "1.4.1",
       "time": "2022-10-30",

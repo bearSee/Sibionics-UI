@@ -358,6 +358,20 @@ export default {
                     defaultVal: 'false',
                 },
                 {
+                    params: 'submitText',
+                    des: '查询按钮文案',
+                    type: 'String',
+                    values: '',
+                    defaultVal: "'查询'",
+                },
+                {
+                    params: 'cancelText',
+                    des: '重置按钮文案',
+                    type: 'String',
+                    values: '',
+                    defaultVal: "'重置'",
+                },
+                {
                     params: 'lablePosition',
                     des: '表单域label的位置',
                     type: 'String',
