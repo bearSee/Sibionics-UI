@@ -66,7 +66,7 @@
             :loading="isLoading"
             @click.native="handlerSubmit"
             v-if="isSubmit !== false">
-            {{ submitText || $t('提交') }}
+            {{ $t(submitText) }}
           </el-button>
         </sib-throttle>
         <sib-throttle
@@ -76,7 +76,7 @@
             class="reset"
             @click.native="handlerResetForm"
             v-if="isCancel !== false">
-            {{ cancelText || $t('重置') }}
+            {{ $t(cancelText) }}
           </el-button>
         </sib-throttle>
         <slot
@@ -136,11 +136,11 @@ export default {
         },
         submitText: {
             type: String,
-            default: '',
+            default: '提交',
         },
         cancelText: {
             type: String,
-            default: '',
+            default: '重置',
         },
         disabled: {
             type: Boolean,

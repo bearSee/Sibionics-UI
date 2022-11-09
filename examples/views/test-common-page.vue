@@ -258,7 +258,7 @@ export default {
                 beforeDelete: null,
             },
             mainDialogConfig: {
-                width: '400px',
+                width: '800px',
                 submitText: '提交哎喂',
                 cancelText: '算了',
                 addItemInfo: [

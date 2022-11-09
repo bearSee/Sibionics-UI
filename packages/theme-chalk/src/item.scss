@@ -103,4 +103,9 @@
     right: 0;
     background: transparent;
   }
+  .upload-over-limit {
+    .el-upload--picture-card {
+      display: none;
+    }
+  }
 }

@@ -432,33 +432,41 @@
     <el-upload
       v-else-if="props.type === 'upload'"
       v-bind="props"
-      :disabled="props.disabled"
-      :action="props.action"
+      :class="props.limit && currentValue.length >= props.limit && 'upload-over-limit'"
       :headers="{ ...uploadHeaders, ...(props.headers || {}) }"
-      :data="props.params || {}"
-      :limit="props.limit"
-      :show-file-list="props.showFileList"
-      :list-type="props.listType || 'text'"
-      :accept="props.accept"
-      :on-success="uploadSuccess"
-      :on-error="uploadError"
-      :on-remove="uploadRemove"
+      :data="props.params || props.data || {}"
+      :on-success="onSuccess"
+      :on-error="onError"
+      :on-remove="onRemove"
       :before-upload="beforeUpload"
       :file-list="currentValue"
       :name="props.name || 'file'"
       @change="handlerChange">
       <el-button
-        :size="props.size || size"
         type="primary"
+        v-if="props.listType !== 'picture-card'"
+        :size="props.size || size"
         :id="`${props.onlyKey || ''}_upload_${props.code}`">
         {{ $t(props.btnText || '点击上传') }}
       </el-button>
+      <i
+        v-else
+        class="el-icon-plus" />
       <div
         slot="tip"
         class="el-upload__tip"
         v-if="props.showTips">
         <!-- accept 为 'image/png' 等 w3c 标准属性 -->
-        {{ props.uploadTip ? props.uploadTip : `${$t('不限制文档类型，大小限制为')}${props.maxSize || 5}M` }}
+        {{ props.uploadTip
+          ? props.uploadTip
+          : (props.accept
+            ? `仅支持上传 ${ props.accept } 类型文件`
+            : `${$t('不限制文档类型')}`)
+            +
+            (props.maxSize
+              ? `，大小限制为${props.maxSize}M`
+              : '')
+        }}
       </div>
     </el-upload>
     <el-input
@@ -550,7 +558,6 @@ export default {
     data() {
         return {
             currentValue: '',
-            file: {},
             // table/tree弹窗选择框默认值展示
             currentFormatValue: '',
             pickerVisible: false,
@@ -614,7 +621,7 @@ export default {
         selections() {
             const { trans = [], showCode } = this.props;
             const keys = this.currentValue || [];
-            const values = this.currentFormatValue && this.currentFormatValue.split(',') || [];
+            const values = this.currentFormatValue && this.currentFormatValue.split && this.currentFormatValue.split(',') || [];
             const valueCode = (trans.find(({ to }) => to === showCode) || {}).from;
             return keys.map((key, i) => ({
                 [this.rowKey]: key,
@@ -762,38 +769,44 @@ export default {
                 return false;
             }
             if (typeof beforeUpload === 'function') {
-                const bool = beforeUpload(file);
+                const bool = !!beforeUpload(file);
                 if (this.loadingBox && !bool) this.loadingBox.close();
                 return bool;
             }
-            this.file = file;
             return true;
         },
-        uploadSuccess(res) {
+        onSuccess(response, file, fileList) {
             if (this.loadingBox) this.loadingBox.close();
-            const { onSuccess } = this.props;
-            res.name = res.filename || res.name || this.file.name;
-            if (typeof onSuccess === 'function') {
-                res = onSuccess(res, this.file);
+            if (typeof this.props.onSuccess === 'function') {
+                fileList = this.props.onSuccess(response, file, fileList) || fileList;
             }
-            if (res) this.currentValue.push(res);
+            this.currentValue = fileList;
             this.uploadHeaders = getUploadHeaders();
-            // this.currentValue.push(res);
-            // const code = (res.data || {}).code || '';
-            // if (String(code) !== '200') {
-            //     this.currentValue.pop(res);
-            //     this.$message.warning(res.msg || this.$t('上传失败'));
-            // }
         },
-        uploadError(err) {
-            this.uploadHeaders = getUploadHeaders();
+        onError(err, file, fileList) {
             if (this.loadingBox) this.loadingBox.close();
-            if (this.props.onError) this.props.onError(err);
+            if (typeof this.props.onError === 'function') {
+                fileList = this.props.onError(err, file, fileList) || fileList;
+            }
+            this.currentValue = fileList;
+            this.uploadHeaders = getUploadHeaders();
         },
-        uploadRemove(file) {
-            if (typeof this.propsonRemove === 'function') this.props.onRemove(file);
-            const index = this.currentValue.indexOf(file);
-            this.currentValue.splice(index, 1);
+        async onRemove(file, fileList) {
+            let files = fileList;
+            if (typeof this.props.onRemove === 'function') {
+                if (!this.loadingBox) {
+                    this.loadingBox = this.$loading({
+                        lock: true,
+                        text: '正在上传...',
+                        spinner: 'el-icon-loading',
+                        background: 'rgba(250, 250, 250, 0.7)',
+                    });
+                }
+                files = await this.props.onRemove(file, fileList);
+                files = files || fileList;
+                if (this.loadingBox) this.loadingBox.close();
+            }
+            this.currentValue = files;
         },
         // table弹窗选择框
         handlerPickerChange(rows) {

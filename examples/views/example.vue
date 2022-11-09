@@ -121,7 +121,7 @@ export default {
             if (['string'].includes(typeof propsData[key]) && !['value'].includes(key) && propsData[key] === '') {
                 return `${key}`;
             }
-            const data = propsData[key];
+            const data = window.SIB.deepCopy(propsData[key]);
             if (Object.prototype.toString.call(data) === '[object Array]') {
                 this.componentData[key] = data.map((item) => {
                     if (Object.prototype.toString.call(item) === '[object Object]') {

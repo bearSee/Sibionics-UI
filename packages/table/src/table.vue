@@ -59,7 +59,7 @@
               :loading="isLoading"
               @click.native="handlerSearch"
               icon="el-icon-search">
-              {{ $t('查询') }}
+              {{ $t(submitText) }}
             </el-button>
           </sib-throttle>
           <sib-throttle
@@ -70,7 +70,7 @@
               :size="size"
               @click.native="handlerResetForm"
               icon="el-icon-refresh">
-              {{ $t('重置') }}
+              {{ $t(cancelText) }}
             </el-button>
           </sib-throttle>
           <template>
@@ -272,6 +272,14 @@ export default {
         searchInfo: {
             type: Array,
             default: () => ([]),
+        },
+        submitText: {
+            type: String,
+            default: '查询',
+        },
+        cancelText: {
+            type: String,
+            default: '重置',
         },
         // 是否支持敲回车查询
         enterable: {
