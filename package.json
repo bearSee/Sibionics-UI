@@ -20,7 +20,7 @@
     "build:demo": "vue-cli-service build --mode release",
     "lib": "vue-cli-service build --target lib --name sibionics --dest lib src/index.js --no-clean",
     "pack": "npm run lib && npm run build:utils && npm run build:locale && npm run build:scss",
-    "dist": "npm run pack && npm run build:demo && git push origin main",
+    "dist": "npm run pack && npm run build:demo && npm publish && git push origin main",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
