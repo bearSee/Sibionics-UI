@@ -121,9 +121,9 @@ export default {
             if (['string'].includes(typeof propsData[key]) && !['value'].includes(key) && propsData[key] === '') {
                 return `${key}`;
             }
-            const data = window.SIB.deepCopy(propsData[key]);
+            const data = propsData[key];
             if (Object.prototype.toString.call(data) === '[object Array]') {
-                this.componentData[key] = data.map((item) => {
+                this.componentData[key] = window.SIB.deepCopy(data).map((item) => {
                     if (Object.prototype.toString.call(item) === '[object Object]') {
                         Object.keys(item).forEach((k) => {
                             if (typeof item[k] === 'function') {
