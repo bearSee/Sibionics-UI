@@ -87,6 +87,8 @@ if (window && document) {
 
 const version = require('../package.json').version;
 
+console.log(`欢迎使用 Sibionics-UI v${version}`);
+
 export default {
   version,
   install,
