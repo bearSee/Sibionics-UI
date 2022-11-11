@@ -356,13 +356,6 @@ export default {
                     defaultVal: '-',
                 },
                 {
-                    params: 'props.options[i].customHTML',
-                    des: '自定义下拉选项的html的方法，需返回html字符串；参数为对应下拉选项的配置',
-                    type: 'Function(opt)',
-                    values: '-',
-                    defaultVal: '-',
-                },
-                {
                     params: '——',
                     des: '——',
                     type: '——',
@@ -389,6 +382,13 @@ export default {
                     type: 'String',
                     values: '-',
                     defaultVal: "'value'",
+                },
+                {
+                    params: 'props.optionProps.customHTML',
+                    des: '自定义下拉选项的html的方法，需返回html字符串；参数为对应下拉选项的配置',
+                    type: 'Function(opt)',
+                    values: '-',
+                    defaultVal: '-',
                 },
                 {
                     params: '——',
