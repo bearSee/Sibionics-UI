@@ -1,6 +1,10 @@
+
 @import "./theme.scss";
-// @import "../../../../lib/theme-chalk/index.scss";
-@import "../../../../packages/theme-chalk/src/index.scss";
+
+$--color-primary: $theme;
+
+@import "../../../../lib/theme-chalk/index.scss";
+// @import "../../../../packages/theme-chalk/src/index.scss";
 
 li {
     line-height: 1.5;

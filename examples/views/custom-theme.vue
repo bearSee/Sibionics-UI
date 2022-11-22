@@ -31,7 +31,7 @@ export default {
                     title: '创建样式文件',
                     des: [
                         '你可以创建一个 scss 样式文件，例如文件名可以叫 global-style.scss',
-                        '然后在 main.js 中，不再引入 sibionics-ui 的打包后的样式，而是引入你创建的这个样式文件',
+                        '然后在 main.js 中，不再引入 sibionics-ui 的打包后的样式，而是引入你创建的这个 global-style.scss 样式文件',
                     ],
                     code: // eslint-disable-next-line vue/script-indent
 `import Vue from 'vue';
@@ -55,7 +55,7 @@ new Vue({
                     subTitle: 'global-style.scss',
                     code: // eslint-disable-next-line vue/script-indent
 `/* ${this.$t('设置全局主题色')} */
-$theme: red;
+$--color-primary: red;
 
 @import "~sibionics-ui/lib/theme-chalk/index.scss";
 `,

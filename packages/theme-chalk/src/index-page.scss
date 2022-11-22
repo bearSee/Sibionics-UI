@@ -1,5 +1,5 @@
 
-@import "common/theme.scss";
+@import "element/common/var.scss";
 
 .sib-index-page {
   width: 100%;
@@ -31,7 +31,7 @@
               padding-left: 8px;
               &.is-active {
                 background: #E8FBF9;
-                border-left: 8px solid $theme;
+                border-left: 8px solid $--color-primary;
               }
             }
             &>.el-menu-item {

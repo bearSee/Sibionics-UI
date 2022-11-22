@@ -1322,6 +1322,7 @@ export default {
                 window.SIB.download(res);
                 this.$message.success('导出成功');
             });
+            this.refreshTable();
         },
         // 新增、编辑、复制弹窗内的表单值被用户手动修改后触发的事件
         formItemChange(value, info) {

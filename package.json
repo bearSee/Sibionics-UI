@@ -81,8 +81,15 @@
       "git add"
     ]
   },
-  "version": "1.4.3",
+  "version": "1.4.4-test",
   "versionTips": [
+    {
+      "version": "1.4.4",
+      "time": "2022-11-21",
+      "tips": [
+        "自定义主题色引入依赖样式路径调整"
+      ]
+    },
     {
       "version": "1.4.3",
       "time": "2022-11-09",

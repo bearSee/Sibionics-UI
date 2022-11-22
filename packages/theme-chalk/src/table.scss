@@ -1,4 +1,4 @@
-@import "common/theme.scss";
+@import "element/common/var.scss";
 
 
 .sib-table {
@@ -19,7 +19,7 @@
     }
     .show-more {
       text-align: center;
-      color: $theme;
+      color: $--color-primary;
       .search_text {
         cursor: pointer;
         font-size: 12px;

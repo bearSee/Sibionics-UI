@@ -5,10 +5,9 @@ import Element from 'element-ui';
 // 进度条控件
 import NProgress from 'nprogress';
 
-// 引入 element-ui 及当前ui库样式
-import 'element-ui/lib/theme-chalk/index.css';
 import 'nprogress/nprogress.css';
 import '../packages/theme-chalk/src/index.scss';
+import '../packages/theme-chalk/src/fonts/icon.css';
 
 // 引入挂载到基础数据类型原型上的方法
 import './utils/common/prototype';

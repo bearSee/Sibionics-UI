@@ -81,7 +81,7 @@ export default {
     替代: '替代',
     设置全局主题色: '设置全局主题色',
     '你可以创建一个 scss 样式文件，例如文件名可以叫 global-style.scss': '你可以创建一个 scss 样式文件，例如文件名可以叫 global-style.scss',
-    '然后在 main.js 中，不再引入 sibionics-ui 的打包后的样式，而是引入你创建的这个样式文件': '然后在 main.js 中，不再引入 sibionics-ui 的打包后的样式，而是引入你创建的这个样式文件',
+    '然后在 main.js 中，不再引入 sibionics-ui 的打包后的样式，而是引入你创建的这个 global-style.scss 样式文件': '然后在 main.js 中，不再引入 sibionics-ui 的打包后的样式，而是引入你创建的这个 global-style.scss 样式文件',
     '设置全局icon图标库路径，非必需，如果需要使用自己打包的icon图标时可以加入': '设置全局icon图标库路径，非必需，如果需要使用自己打包的icon图标时可以加入',
     '你可以在 el-dialog 弹窗组件上添加 v-dialogDrag 指令，使其支持拖拽': '你可以在 el-dialog 弹窗组件上添加 v-dialogDrag 指令，使其支持拖拽',
     内容: '内容',
